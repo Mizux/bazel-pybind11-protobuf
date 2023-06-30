@@ -1,3 +1,4 @@
 exports_files([
+  "protobuf-v23.3.patch",
   "pybind11_bazel.patch",
 ])
