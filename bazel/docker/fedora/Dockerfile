@@ -24,9 +24,15 @@ COPY . .
 
 FROM devel AS build
 RUN bazel version
-RUN bazel build -c opt --cxxopt=-std=c++17 ...
+RUN bazel build \
+ -c opt \
+ --action_env=BAZEL_CXXOPTS="-std=c++17" \
+ --subcommands=true \
+ ...
 
 FROM build AS test
-# bazel5 struggle to find any python[3] interpreter in PATH even if available
-# i.e. @rules_python//python:autodetecting_toolchain is broken
-RUN bazel test -c opt --cxxopt=-std=c++17 --test_output=errors ...
+RUN bazel test \
+ -c opt \
+ --action_env=BAZEL_CXXOPTS="-std=c++17" \
+ --test_output=errors \
+ ...
