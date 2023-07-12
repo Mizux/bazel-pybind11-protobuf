@@ -10,8 +10,7 @@ pros:
 cons:
 
 * Only GNU/Linux distro supported.
-* Could take few GiB (~30 GiB for all distro and all languages)
-  * ~500MiB OS + C++/CMake tools,
+* Could take few GiB.
 
 ## Usage
 
