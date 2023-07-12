@@ -1,4 +1,7 @@
 enable_language(CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Check primitive types
 option(CHECK_TYPE "Check primitive type size" OFF)
@@ -41,7 +44,6 @@ include(GNUInstallDirs)
 function(add_cpp_test FILE_NAME)
   message(STATUS "Configuring test ${FILE_NAME}: ...")
   get_filename_component(TEST_NAME ${FILE_NAME} NAME_WE)
-  get_filename_component(TEST_DIR ${FILE_NAME} DIRECTORY)
   get_filename_component(COMPONENT_DIR ${FILE_NAME} DIRECTORY)
   get_filename_component(COMPONENT_NAME ${COMPONENT_DIR} NAME)
 
@@ -56,12 +58,8 @@ function(add_cpp_test FILE_NAME)
   target_include_directories(${TEST_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
   target_compile_features(${TEST_NAME} PRIVATE cxx_std_17)
   target_link_libraries(${TEST_NAME} PRIVATE
-    #Catch2 Catch2WithMain
-    GTest::gtest GTest::gtest_main
-    ${PROJECT_NAMESPACE}::Foo
-    ${PROJECT_NAMESPACE}::Bar
-    ${PROJECT_NAMESPACE}::FooBar
-  )
+    GTest::gtest_main
+    ${PROJECT_NAMESPACE}::foo)
 
   if(BUILD_TESTING)
     add_test(NAME cpp_${COMPONENT_NAME}_${TEST_NAME} COMMAND ${TEST_NAME})
@@ -115,7 +113,9 @@ add_subdirectory(bar)
 add_subdirectory(foobar)
 add_subdirectory(app)
 
-# Install
+###################
+## CMake Install ##
+###################
 install(EXPORT ${PROJECT_NAME}Targets
   NAMESPACE ${PROJECT_NAMESPACE}::
   DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
@@ -135,39 +135,3 @@ install(
   "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
   DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}"
   COMPONENT Devel)
-
-# add_cpp_example()
-# CMake function to generate and build C++ example.
-# Parameters:
-#  the C++ filename
-# e.g.:
-# add_cpp_example(foo.cpp)
-function(add_cpp_example FILE_NAME)
-  message(STATUS "Configuring example ${FILE_NAME}: ...")
-  get_filename_component(EXAMPLE_NAME ${FILE_NAME} NAME_WE)
-  get_filename_component(COMPONENT_DIR ${FILE_NAME} DIRECTORY)
-  get_filename_component(COMPONENT_NAME ${COMPONENT_DIR} NAME)
-
-  if(APPLE)
-    set(CMAKE_INSTALL_RPATH
-      "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path")
-  elseif(UNIX)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN")
-  endif()
-
-  add_executable(${EXAMPLE_NAME} ${FILE_NAME})
-  target_include_directories(${EXAMPLE_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-  target_compile_features(${EXAMPLE_NAME} PRIVATE cxx_std_17)
-  target_link_libraries(${EXAMPLE_NAME} PRIVATE
-    ${PROJECT_NAMESPACE}::Foo
-    ${PROJECT_NAMESPACE}::Bar
-    ${PROJECT_NAMESPACE}::FooBar)
-
-  include(GNUInstallDirs)
-  install(TARGETS ${EXAMPLE_NAME})
-
-  if(BUILD_TESTING)
-    add_test(NAME cpp_${COMPONENT_NAME}_${EXAMPLE_NAME} COMMAND ${EXAMPLE_NAME})
-  endif()
-  message(STATUS "Configuring example ${FILE_NAME}: ...DONE")
-endfunction()

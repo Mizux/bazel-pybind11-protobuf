@@ -71,7 +71,6 @@ endif()
 option(BUILD_ZLIB "Build the ZLIB dependency Library" ON)
 option(BUILD_absl "Build the abseil-cpp dependency Library" ON)
 option(BUILD_Protobuf "Build the Protobuf dependency Library" ON)
-option(BUILD_googletest "Build the googletest dependency Library" ON)
 
 # Disable CTest targets
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)

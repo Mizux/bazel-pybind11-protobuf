@@ -38,3 +38,7 @@ if(BUILD_TESTING)
     message(FATAL_ERROR "Target GTest::gtest_main not available.")
   endif()
 endif()
+
+if(NOT BUILD_pybind11)
+  find_package(pybind11 REQUIRED)
+endif()
