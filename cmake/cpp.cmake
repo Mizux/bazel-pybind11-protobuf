@@ -108,11 +108,6 @@ macro(get_cpp_proto PROTO_HDRS PROTO_SRCS)
   endforeach()
 endmacro()
 
-add_subdirectory(foo)
-add_subdirectory(bar)
-add_subdirectory(foobar)
-add_subdirectory(app)
-
 ###################
 ## CMake Install ##
 ###################

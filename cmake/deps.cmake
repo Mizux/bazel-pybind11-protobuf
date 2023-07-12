@@ -27,6 +27,10 @@ if(NOT TARGET protobuf::libprotobuf)
   message(FATAL_ERROR "Target protobuf::libprotobuf not available.")
 endif()
 
+if(NOT BUILD_pybind11)
+  find_package(pybind11 REQUIRED)
+endif()
+
 if(BUILD_TESTING)
   if(NOT BUILD_googletest)
     find_package(googletest REQUIRED)
@@ -39,6 +43,3 @@ if(BUILD_TESTING)
   endif()
 endif()
 
-if(NOT BUILD_pybind11)
-  find_package(pybind11 REQUIRED)
-endif()
