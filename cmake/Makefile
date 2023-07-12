@@ -1,5 +1,4 @@
-PROJECT := bazel-proto
-BUILD_SYSTEM := cmake
+PROJECT := cmake-pybind11
 BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 SHA1 := $(shell git rev-parse --verify HEAD)
 

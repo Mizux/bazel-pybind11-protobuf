@@ -1,6 +1,6 @@
 # Create a virtual environment with all tools installed
 # ref: https://hub.docker.com/_/debian
-FROM debian:sid AS env
+FROM debian:latest AS env
 # Install system build dependencies
 ENV PATH=/usr/local/bin:$PATH
 RUN apt-get update -qq \
@@ -8,6 +8,13 @@ RUN apt-get update -qq \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install Python
+RUN apt-get update -qq \
+&& apt-get install -yq python3-dev python3-pip python3-venv \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Add the library src to our build env
 FROM env AS devel
 WORKDIR /home/project
 COPY . .
@@ -23,15 +30,16 @@ RUN cmake --build build --target test -v
 
 # Test install rules
 FROM env AS install_env
-COPY --from=build /usr/local /usr/local/
+COPY --from=build /home/project/build/python/dist/*.whl ./
+RUN python3 -m pip install --find-links=. \
+ bazelpybind11*.whl
 
 FROM install_env AS install_devel
 WORKDIR /home/samples
 COPY cmake/samples .
 
 FROM install_devel AS install_build
-RUN cmake -S. -Bbuild
-RUN cmake --build build --target all -v
+RUN python3 sample.py
 
 FROM install_build AS install_test
-RUN cmake --build build --target test -v
+RUN python3 sample.py

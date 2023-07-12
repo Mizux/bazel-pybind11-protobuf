@@ -4,35 +4,37 @@
 import sys
 import unittest
 
-import native_lib.python
-import native_lib.python.myfoo as pyfoo
-from native_lib.python.myfoo import Foo
+
+try:
+    import foo.python as fp
+    import foo.python.pyfoo as fpf
+    from foo.python.pyfoo import Foo
+except ImportError:
+    import bazelpybind11.foo.python as fp
+    import bazelpybind11.foo.python.pyfoo as fpf
+    from bazelpybind11.foo.python.pyfoo import Foo
 
 if __debug__:
     print(f'python path: {sys.path}')
 
-    print(f'foo.python: ${dir(native_lib.python)}')
-
-    print(f'foo.python.myfoo: ${dir(native_lib.python.myfoo)}')
-    print(f'pyfoo: ${dir(pyfoo)}')
-
-    print(f'foo.python.myfoo.Foo: ${dir(native_lib.python.myfoo.Foo)}')
-    print(f'pyfoo.Foo: ${dir(pyfoo.Foo)}')
+    print(f'foo.python: ${dir(fp)}')
+    print(f'foo.python.pyfoo: ${dir(fpf)}')
+    print(f'foo.python.pyfoo.Foo: ${dir(fpf.Foo)}')
 
 
 class TestFoo(unittest.TestCase):
     '''Test Foo'''
     def test_free_function(self):
-        pyfoo.free_function(2147483647)  # max int
-        pyfoo.free_function(2147483647 + 1)  # max int + 1
+        fpf.free_function(2147483647)  # max int
+        fpf.free_function(2147483647 + 1)  # max int + 1
 
     def test_string_vector(self):
-        self.assertEqual(4, pyfoo.string_vector_input(["1", "2", "3", "4"]))
+        self.assertEqual(4, fpf.string_vector_input(["1", "2", "3", "4"]))
 
         self.assertEqual(
-            5, pyfoo.string_vector_ref_input(["1", "2", "3", "4", "5"]))
+            5, fpf.string_vector_ref_input(["1", "2", "3", "4", "5"]))
 
-        res = pyfoo.string_vector_output(3)
+        res = fpf.string_vector_output(3)
         if __debug__:
             print(f"res: {res}")
         self.assertEqual(3, len(res))
@@ -40,38 +42,38 @@ class TestFoo(unittest.TestCase):
     def test_string_jagged_array(self):
         self.assertEqual(
             3,
-            pyfoo.string_jagged_array_input([['1'], ['2', '3'],
+            fpf.string_jagged_array_input([['1'], ['2', '3'],
                                              ['4', '5', '6']]))
 
         self.assertEqual(
             4,
-            pyfoo.string_jagged_array_ref_input([['1'], ['2', '3'],
+            fpf.string_jagged_array_ref_input([['1'], ['2', '3'],
                                                  ['4', '5', '6'], ['7']]))
 
-        v = pyfoo.string_jagged_array_output(5)
+        v = fpf.string_jagged_array_output(5)
         self.assertEqual(5, len(v))
         for i in range(5):
             self.assertEqual(i + 1, len(v[i]))
 
     def test_pair_vector(self):
-        self.assertEqual(3, pyfoo.pair_vector_input([(1, 2), (3, 4), (5, 6)]))
+        self.assertEqual(3, fpf.pair_vector_input([(1, 2), (3, 4), (5, 6)]))
 
         self.assertEqual(3,
-                         pyfoo.pair_vector_ref_input([(1, 2), (3, 4), (5, 6)]))
+                         fpf.pair_vector_ref_input([(1, 2), (3, 4), (5, 6)]))
 
-        res = pyfoo.pair_vector_output(3)
+        res = fpf.pair_vector_output(3)
         if __debug__:
             print(f"res: {res}")
         self.assertEqual(3, len(res))
 
     def test_pair_jagged_array(self):
         self.assertEqual(
-            2, pyfoo.pair_jagged_array_input([[(1, 1)], [(2, 2), (2, 2)]]))
+            2, fpf.pair_jagged_array_input([[(1, 1)], [(2, 2), (2, 2)]]))
 
         self.assertEqual(
-            2, pyfoo.pair_jagged_array_ref_input([[(1, 1)], [(2, 2), (2, 2)]]))
+            2, fpf.pair_jagged_array_ref_input([[(1, 1)], [(2, 2), (2, 2)]]))
 
-        res = pyfoo.pair_jagged_array_output(5)
+        res = fpf.pair_jagged_array_output(5)
         if __debug__:
             print(f"res: {res}")
         self.assertEqual(5, len(res))

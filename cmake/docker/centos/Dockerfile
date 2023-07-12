@@ -10,6 +10,13 @@ RUN dnf -y update \
 && rm -rf /var/cache/dnf
 CMD [ "/usr/bin/bash" ]
 
+# Install Python
+RUN dnf -y update \
+&& dnf -y install python39-devel \
+&& dnf clean all \
+&& rm -rf /var/cache/dnf
+
+# Add the library src to our build env
 FROM env AS devel
 WORKDIR /home/project
 COPY . .
@@ -25,15 +32,16 @@ RUN cmake --build build --target test -v
 
 # Test install rules
 FROM env AS install_env
-COPY --from=build /usr/local /usr/local/
+COPY --from=build /home/project/build/python/dist/*.whl ./
+RUN python3 -m pip install --find-links=. \
+ bazelpybind11*.whl
 
 FROM install_env AS install_devel
 WORKDIR /home/samples
 COPY cmake/samples .
 
 FROM install_devel AS install_build
-RUN cmake -S. -Bbuild
-RUN cmake --build build --target all -v
+RUN python3 sample.py
 
 FROM install_build AS install_test
-RUN cmake --build build --target test -v
+RUN python3 sample.py

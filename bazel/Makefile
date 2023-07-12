@@ -1,5 +1,4 @@
 PROJECT := bazel-pybind11-protobuf
-BUILD_SYSTEM := bazel
 BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 SHA1 := $(shell git rev-parse --verify HEAD)
 
@@ -90,7 +89,7 @@ SUFFIXES :=
 .SECONDARY:
 
 # Docker image name prefix.
-IMAGE := ${PROJECT}/${BUILD_SYSTEM}
+IMAGE := ${PROJECT}
 
 ifdef NOCACHE
 DOCKER_BUILD_CMD := docker build --no-cache
@@ -102,7 +101,7 @@ endif
 DOCKER_RUN_CMD := docker run --rm --init --net=host
 
 # Currently supported distro
-DISTROS = alpine archlinux centos debian fedora opensuse ubuntu
+DISTROS := alpine archlinux centos debian fedora opensuse ubuntu
 
 # $* stem
 # $< first prerequist
@@ -111,7 +110,7 @@ DISTROS = alpine archlinux centos debian fedora opensuse ubuntu
 ############
 ## STAGES ##
 ############
-STAGES = env devel build test
+STAGES := env devel build test
 define make-stage-target =
 #$$(info STAGE: $1)
 #$$(info Create targets: all_$1 $(addsuffix _$1, $(DISTROS)).)

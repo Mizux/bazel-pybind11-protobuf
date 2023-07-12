@@ -31,14 +31,16 @@ Github-CI:
 <a href="#codemap">Codemap</a> |
 <a href="#dependencies">Dependencies</a> |
 <a href="#build">Build</a> |
-<a href="ci/README.md">CI</a> |
+<a href="bazel/README.md">Bazel CI</a> |
+<a href="cmake/README.md">CMake CI</a> |
 <a href="#appendices">Appendices</a> |
 <a href="#license">License</a> |
 </nav>
 
-Bazel C++ pybind11 protobuf sample with tests and GitHub CI support.
-
+Bazel C++, pybind11 and protobuf sample with tests and GitHub CI support.<br>
 This project should run on GNU/Linux, MacOS and Windows.
+
+note: A CMake support is also provided as comparison
 
 ## Requirement
 
@@ -53,8 +55,8 @@ The project layout is as follow:
 
 * [WORKSPACE](WORKSPACE) Top-level for [Bazel](https://bazel.build) based build.
 * [pure_lib](pure_lib) Pure python library to check Python support.
-* [native_lib](native_lib) Simple C++ library.
-  * [python](native_lib/python) Python wrapper using pybind11-protobuf.
+* [foo](foo) Simple C++ library.
+  * [python](foo/python) Python wrapper using pybind11 and protobuf.
 
 ## Build
 

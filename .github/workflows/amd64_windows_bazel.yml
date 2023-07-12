@@ -1,3 +1,4 @@
+# ref: https://github.com/actions/runner-images
 name: amd64 Windows Bazel
 
 on: [push, pull_request]
@@ -5,12 +6,13 @@ on: [push, pull_request]
 jobs:
   # Building using the github runner environement directly.
   windows:
-    # Workaround for https://github.com/bazelbuild/bazel/issues/18592
     strategy:
       matrix:
+        # VS-2022 broken see https://github.com/bazelbuild/bazel/issues/18592
         runner: [windows-2022, windows-2019]
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.7', '3.8', '3.9', '3.10', '3.11']
         option: [
+          '',
           '--repo_env=BAZEL_CXXOPTS="/std:c++17"',
           '--action_env=BAZEL_CXXOPTS="/std:c++17"',
           '--cxxopt="/std:c++17"']

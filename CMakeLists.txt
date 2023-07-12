@@ -4,8 +4,8 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile command" TRUE)
 
-project(BazelProto VERSION 1.0 LANGUAGES CXX)
-set(PROJECT_NAMESPACE BazelProto)
+project(BazelPybind11Protobuf VERSION 1.0 LANGUAGES CXX)
+set(PROJECT_NAMESPACE bpb11pb)
 message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 #message(STATUS "major: ${PROJECT_VERSION_MAJOR}")
 #message(STATUS "minor: ${PROJECT_VERSION_MINOR}")
@@ -77,14 +77,22 @@ option(BUILD_googletest "Build the googletest dependency Library" ON)
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)
 
-option(BUILD_EXAMPLES "Build examples" ON)
-message(STATUS "Build examples: ${BUILD_EXAMPLES}")
+# Build deps
+option(BUILD_googletest "Build the googletest dependency Library" ON)
+
+option(BUILD_pybind11 "Build pybind11 library" ON)
+message(STATUS "Build pybind11: ${BUILD_pybind11}")
+
+option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
+message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")
 
 # Build Needed dependencies
 add_subdirectory(cmake/dependencies dependencies)
-list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/dependencies/install)
+#list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/dependencies/install)
 
-include(host)
 include(deps)
 include(cpp)
-#add_subdirectory(examples)
+add_subdirectory(foo)
+
+include(python)
+add_subdirectory(foo/python)

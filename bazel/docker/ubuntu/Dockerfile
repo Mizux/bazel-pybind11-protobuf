@@ -2,7 +2,6 @@
 # ref: https://hub.docker.com/_/ubuntu
 FROM ubuntu:rolling AS env
 
-# Install system build dependencies
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
@@ -31,13 +30,13 @@ FROM devel AS build
 RUN bazel version
 RUN bazel build \
  -c opt \
- --action_env=BAZEL_CXXOPTS="-std=c++17" \
+ --cxxopt="-std=c++17" \
  --subcommands=true \
  ...
 
 FROM build AS test
 RUN bazel test \
  -c opt \
- --action_env=BAZEL_CXXOPTS="-std=c++17" \
+ --cxxopt="-std=c++17" \
  --test_output=errors \
  ...

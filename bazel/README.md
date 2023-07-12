@@ -41,11 +41,11 @@ Dockerfile is splitted in several stages.
 
 ![docker](docs/docker.svg)
 
-## Run arm64v8 image on amd64 machine
+## Docker arm64 on amd64 machine
 
 ### Setup
 
-You can build and run `arm64v8` (i.e. `aarch64`) docker container on a `amd64` host (`x86_64`) by enabling qemu support:
+You can build and run `arm64` (i.e. `aarch64`) docker container on a `amd64` host (`x86_64`) by enabling qemu support:
 
 ```sh
 docker run --pull always --rm --privileged multiarch/qemu-user-static --reset -p yes
