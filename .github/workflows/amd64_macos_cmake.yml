@@ -21,10 +21,10 @@ jobs:
       TEST_TARGET: ${{ matrix.build[3] }}
       INSTALL_TARGET: ${{ matrix.build[4] }}
     steps:
-    - uses: actions/checkout@v3
-    - name: Check cmake
-      run: cmake --version
-    - name: Configure
+      - uses: actions/checkout@v3
+      - name: Check cmake
+        run: cmake --version
+      - name: Configure
         run: >
           cmake
           -S.
@@ -32,14 +32,14 @@ jobs:
           -G "$GENERATOR"
           -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
           -DCMAKE_INSTALL_PREFIX=install
-    - name: Build
+      - name: Build
         run: >
           cmake
           --build build
           --config "$BUILD_TYPE"
           --target "$BUILD_TARGET"
           -v
-    - name: Test
+      - name: Test
         run: >
           CTEST_OUTPUT_ON_FAILURE=1
           cmake
@@ -47,7 +47,7 @@ jobs:
           --config "$BUILD_TYPE"
           --target "$TEST_TARGET"
           -v
-    - name: Install
+      - name: Install
         run: >
           cmake
           --build build

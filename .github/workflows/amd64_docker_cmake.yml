@@ -16,25 +16,25 @@ jobs:
       PLATFORM: ${{ matrix.platform }}
       DISTRO: ${{ matrix.distro }}
     steps:
-    - uses: actions/checkout@v3
-    - name: Check docker
-      run: |
-        docker info
-        docker buildx ls
-    - name: Build env image
+      - uses: actions/checkout@v3
+      - name: Check docker
+        run: |
+          docker info
+          docker buildx ls
+      - name: Build env image
         run: make --directory=cmake ${PLATFORM}_${DISTRO}_env
-    - name: Build devel project
+      - name: Build devel project
         run: make --directory=cmake ${PLATFORM}_${DISTRO}_devel
-    - name: Build project
+      - name: Build project
         run: make --directory=cmake ${PLATFORM}_${DISTRO}_build
-    - name: Test project
+      - name: Test project
         run: make --directory=cmake ${PLATFORM}_${DISTRO}_test
 
-    - name: Build install env image
+      - name: Build install env image
         run: make --directory=cmake ${PLATFORM}_${DISTRO}_install_env
-    - name: Build install devel project
+      - name: Build install devel project
         run: make --directory=cmake ${PLATFORM}_${DISTRO}_install_devel
-    - name: Build install project
+      - name: Build install project
         run: make --directory=cmake ${PLATFORM}_${DISTRO}_install_build
-    - name: Test install project
+      - name: Test install project
         run: make --directory=cmake ${PLATFORM}_${DISTRO}_install_test
