@@ -84,8 +84,8 @@ pip_parse(
    name = "pip_deps",
    requirements = "//:requirements.txt",
 )
-load("@pip_deps//:requirements.bzl",
-     install_pip_deps="install_deps")
+
+load("@pip_deps//:requirements.bzl", install_pip_deps="install_deps")
 install_pip_deps()
 
 git_repository(
