@@ -28,6 +28,10 @@ class TestFoo(unittest.TestCase):
         fpf.free_function(2147483647)  # max int
         fpf.free_function(2147483647 + 1)  # max int + 1
 
+    def test_proto_function(self):
+        c = fpf.proto_function(42)
+        print(c)
+
     def test_string_vector(self):
         self.assertEqual(4, fpf.string_vector_input(["1", "2", "3", "4"]))
 
