@@ -42,4 +42,3 @@ if(BUILD_TESTING)
     message(FATAL_ERROR "Target GTest::gtest_main not available.")
   endif()
 endif()
-

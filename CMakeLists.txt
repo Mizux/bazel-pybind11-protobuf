@@ -89,6 +89,7 @@ message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")
 add_subdirectory(cmake/dependencies dependencies)
 #list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/dependencies/install)
 
+include(host)
 include(deps)
 include(cpp)
 add_subdirectory(foo)
