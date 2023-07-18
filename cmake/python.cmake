@@ -93,6 +93,56 @@ message(STATUS "Python project: ${PYTHON_PROJECT}")
 set(PYTHON_PROJECT_DIR ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT})
 message(STATUS "Python project build path: ${PYTHON_PROJECT_DIR}")
 
+##################
+##  PROTO FILE  ##
+##################
+# Generate Protobuf py sources with mypy support
+search_python_module(
+  NAME mypy_protobuf
+  PACKAGE mypy-protobuf
+  NO_VERSION)
+set(PROTO_PYS)
+set(PROTO_MYPYS)
+file(GLOB_RECURSE proto_py_files RELATIVE ${PROJECT_SOURCE_DIR} "foo/*.proto")
+## Get Protobuf include dir
+get_target_property(protobuf_dirs protobuf::libprotobuf INTERFACE_INCLUDE_DIRECTORIES)
+foreach(dir IN LISTS protobuf_dirs)
+  if (NOT "${dir}" MATCHES "INSTALL_INTERFACE|-NOTFOUND")
+    message(STATUS "protoc(cc) Adding proto path: ${dir}")
+    list(APPEND PROTO_DIRS "--proto_path=${dir}")
+  endif()
+endforeach()
+
+foreach(PROTO_FILE IN LISTS proto_py_files)
+  message(STATUS "protoc(py) .proto: ${PROTO_FILE}")
+  get_filename_component(PROTO_DIR ${PROTO_FILE} DIRECTORY)
+  get_filename_component(PROTO_NAME ${PROTO_FILE} NAME_WE)
+  set(PROTO_PY ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT}/${PROTO_DIR}/${PROTO_NAME}_pb2.py)
+  set(PROTO_MYPY ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT}/${PROTO_DIR}/${PROTO_NAME}_pb2.pyi)
+  message(STATUS "protoc(py) py: ${PROTO_PY}")
+  message(STATUS "protoc(py) mypy: ${PROTO_MYPY}")
+  add_custom_command(
+    OUTPUT ${PROTO_PY}
+    COMMAND ${PROTOC_PRG}
+    "--proto_path=${PROJECT_SOURCE_DIR}"
+    ${PROTO_DIRS}
+    "--python_out=${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT}"
+    "--mypy_out=${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT}"
+    ${PROTO_FILE}
+    DEPENDS ${PROTO_FILE} ${PROTOC_PRG}
+    COMMENT "Generate Python 3 protocol buffer for ${PROTO_FILE}"
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    VERBATIM)
+  list(APPEND PROTO_PYS ${PROTO_PY})
+  list(APPEND PROTO_MYPYS ${PROTO_MYPY})
+endforeach()
+
+add_custom_target(Py${PROJECT_NAME}_proto
+  DEPENDS
+    ${PROTO_PYS}
+    ${PROTO_MYPYS}
+    ${PROJECT_NAMESPACE}::foo)
+
 #######################
 ## Python Packaging  ##
 #######################
@@ -145,6 +195,7 @@ add_custom_command(
     python/setup.py
     ${PROJECT_NAMESPACE}::foo
     ${PROJECT_NAMESPACE}::foo_pybind11
+    Py${PROJECT_NAME}_proto
   BYPRODUCTS
     python/${PYTHON_PROJECT}
     python/${PYTHON_PROJECT}.egg-info
@@ -184,6 +235,8 @@ if(BUILD_TESTING)
     # Must NOT call it in a folder containing the setup.py otherwise pip call it
     # (i.e. "python setup.py bdist") while we want to consume the wheel package
     COMMAND ${VENV_Python3_EXECUTABLE} -m pip install --find-links=${CMAKE_CURRENT_BINARY_DIR}/python/dist ${PYTHON_PROJECT}
+    # install modules only required to run examples
+    COMMAND ${VENV_Python3_EXECUTABLE} -m pip install protobuf
     BYPRODUCTS ${VENV_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Create venv and install ${PYTHON_PROJECT}"
