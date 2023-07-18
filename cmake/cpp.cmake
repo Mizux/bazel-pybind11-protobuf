@@ -97,8 +97,9 @@ macro(get_cpp_proto PROTO_HDRS PROTO_SRCS)
       OUTPUT ${PROTO_SRC} ${PROTO_HDR}
       COMMAND ${PROTOC_PRG}
         "--proto_path=${PROJECT_SOURCE_DIR}"
+        ${PROTO_DIRS}
         "--cpp_out=${PROJECT_BINARY_DIR}"
-        ${PROTO_DIRS} ${PROTO_FILE}
+        ${PROTO_FILE}
       DEPENDS ${PROTO_NAME}.proto ${PROTOC_PRG}
       COMMENT "Generate C++ protocol buffer for ${PROTO_FILE}"
       WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
