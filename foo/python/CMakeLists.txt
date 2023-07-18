@@ -15,6 +15,8 @@ elseif(UNIX)
     INSTALL_RPATH "$ORIGIN:$ORIGIN/../../../${PYTHON_PROJECT}/.libs"
     )
 endif()
+target_include_directories(foo_pybind11 PRIVATE
+  ${protobuf_SOURCE_DIR})
 target_link_libraries(foo_pybind11 PRIVATE
   ${PROJECT_NAMESPACE}::foo
   pybind11_native_proto_caster
