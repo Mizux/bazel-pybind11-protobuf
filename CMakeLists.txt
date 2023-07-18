@@ -81,6 +81,8 @@ option(BUILD_googletest "Build the googletest dependency Library" ON)
 
 option(BUILD_pybind11 "Build pybind11 library" ON)
 message(STATUS "Build pybind11: ${BUILD_pybind11}")
+option(BUILD_pybind11_protobuf "Build the pybind11_protobuf dependency Library" ON)
+message(STATUS "Python: Build pybind11_protobuf: ${BUILD_pybind11_protobuf}")
 
 option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
 message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")

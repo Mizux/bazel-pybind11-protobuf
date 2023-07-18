@@ -1,6 +1,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
+#include "pybind11_protobuf/native_proto_caster.h"
 #include <foo/foo.hpp>
 
 namespace py = pybind11;
@@ -14,6 +15,10 @@ PYBIND11_MODULE(pyfoo, m) {
     m.doc() = "pyfoo module"; // optional module docstring
 
     // Free function
+    m.def("free_function", py::overload_cast<int>(&::foo::freeFunction), "A free function taking an int.");
+    m.def("free_function", py::overload_cast<int64_t>(&::foo::freeFunction), "A free function taking an int64.");
+    m.def("proto_function", &::foo::protoFunction, "A function that return a proto.");
+
     // Vector of String
     m.def("string_vector_output", &::foo::stringVectorOutput, "A function that return a vector of string.");
     m.def("string_vector_input", &::foo::stringVectorInput, "A function that use a vector of string.");
@@ -33,10 +38,6 @@ PYBIND11_MODULE(pyfoo, m) {
     m.def("pair_jagged_array_output", &::foo::pairJaggedArrayOutput, "A function that return a jagged array of pair.");
     m.def("pair_jagged_array_input", &::foo::pairJaggedArrayInput, "A function that use a jagged array of pair.");
     m.def("pair_jagged_array_ref_input", &::foo::pairJaggedArrayRefInput, "A function that use a jagged array of pair const ref.");
-
-    // Free Function
-    m.def("free_function", py::overload_cast<int>(&::foo::freeFunction), "A free function taking an int.");
-    m.def("free_function", py::overload_cast<int64_t>(&::foo::freeFunction), "A free function taking an int64.");
 
     // Class Foo
     py::class_<::foo::Foo>(m, "Foo")

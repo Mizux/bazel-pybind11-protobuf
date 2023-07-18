@@ -15,7 +15,10 @@ elseif(UNIX)
     INSTALL_RPATH "$ORIGIN:$ORIGIN/../../../${PYTHON_PROJECT}/.libs"
     )
 endif()
-target_link_libraries(foo_pybind11 PRIVATE ${PROJECT_NAMESPACE}::foo)
+target_link_libraries(foo_pybind11 PRIVATE
+  ${PROJECT_NAMESPACE}::foo
+  pybind11_native_proto_caster
+)
 add_library(${PROJECT_NAMESPACE}::foo_pybind11 ALIAS foo_pybind11)
 
 add_python_test(${CMAKE_CURRENT_SOURCE_DIR}/foo_test.py)

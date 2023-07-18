@@ -85,6 +85,23 @@ if(BUILD_Protobuf)
   message(CHECK_PASS "fetched")
 endif()
 
+# ##############################################################################
+# Pybind11 Protobuf
+# ##############################################################################
+if(BUILD_pybind11_protobuf)
+  message(CHECK_START "Fetching pybind11_protobuf")
+  list(APPEND CMAKE_MESSAGE_INDENT "  ")
+  FetchContent_Declare(
+    pybind11_protobuf
+    GIT_REPOSITORY "https://github.com/pybind/pybind11_protobuf.git"
+    GIT_TAG "main"
+    PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11_protobuf.patch"
+  )
+  FetchContent_MakeAvailable(pybind11_protobuf)
+  list(POP_BACK CMAKE_MESSAGE_INDENT)
+  message(CHECK_PASS "fetched")
+endif()
+
 ###############
 ##  TESTING  ##
 ###############
