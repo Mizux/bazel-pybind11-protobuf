@@ -6,7 +6,7 @@ pybind_extension(
     name = "pyfoo",
     srcs = ["foo.cpp"],
     deps = [
-        "//foo:foo",
+        "//bp11/foo:foo",
         "@pybind11_protobuf//pybind11_protobuf:native_proto_caster",
     ],
 )
@@ -16,6 +16,9 @@ py_test(
     size = "small",
     srcs = ["foo_test.py"],
     python_version = "PY3",
-    deps = [":pyfoo"],
+    deps = [
+        ":pyfoo",
+        "//bp11/foo:foo_py_pb2",
+    ],
     tags = ["unit"],
 )

@@ -88,7 +88,7 @@ function(search_python_internal_module)
   endif()
 endfunction()
 
-set(PYTHON_PROJECT bazelpybind11)
+set(PYTHON_PROJECT ${PROJECT_NAMESPACE})
 message(STATUS "Python project: ${PYTHON_PROJECT}")
 set(PYTHON_PROJECT_DIR ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT})
 message(STATUS "Python project build path: ${PYTHON_PROJECT_DIR}")
@@ -103,7 +103,7 @@ search_python_module(
   NO_VERSION)
 set(PROTO_PYS)
 set(PROTO_MYPYS)
-file(GLOB_RECURSE proto_py_files RELATIVE ${PROJECT_SOURCE_DIR} "foo/*.proto")
+file(GLOB_RECURSE proto_py_files RELATIVE ${PROJECT_SOURCE_DIR} "bp11/foo/*.proto")
 ## Get Protobuf include dir
 get_target_property(protobuf_dirs protobuf::libprotobuf INTERFACE_INCLUDE_DIRECTORIES)
 foreach(dir IN LISTS protobuf_dirs)
@@ -117,8 +117,8 @@ foreach(PROTO_FILE IN LISTS proto_py_files)
   message(STATUS "protoc(py) .proto: ${PROTO_FILE}")
   get_filename_component(PROTO_DIR ${PROTO_FILE} DIRECTORY)
   get_filename_component(PROTO_NAME ${PROTO_FILE} NAME_WE)
-  set(PROTO_PY ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT}/${PROTO_DIR}/${PROTO_NAME}_pb2.py)
-  set(PROTO_MYPY ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT}/${PROTO_DIR}/${PROTO_NAME}_pb2.pyi)
+  set(PROTO_PY ${PROJECT_BINARY_DIR}/python/${PROTO_DIR}/${PROTO_NAME}_pb2.py)
+  set(PROTO_MYPY ${PROJECT_BINARY_DIR}/python/${PROTO_DIR}/${PROTO_NAME}_pb2.pyi)
   message(STATUS "protoc(py) py: ${PROTO_PY}")
   message(STATUS "protoc(py) mypy: ${PROTO_MYPY}")
   add_custom_command(
@@ -126,8 +126,8 @@ foreach(PROTO_FILE IN LISTS proto_py_files)
     COMMAND ${PROTOC_PRG}
     "--proto_path=${PROJECT_SOURCE_DIR}"
     ${PROTO_DIRS}
-    "--python_out=${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT}"
-    "--mypy_out=${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT}"
+    "--python_out=${PROJECT_BINARY_DIR}/python"
+    "--mypy_out=${PROJECT_BINARY_DIR}/python"
     ${PROTO_FILE}
     DEPENDS ${PROTO_FILE} ${PROTOC_PRG}
     COMMENT "Generate Python 3 protocol buffer for ${PROTO_FILE}"
@@ -236,7 +236,7 @@ if(BUILD_TESTING)
     # (i.e. "python setup.py bdist") while we want to consume the wheel package
     COMMAND ${VENV_Python3_EXECUTABLE} -m pip install --find-links=${CMAKE_CURRENT_BINARY_DIR}/python/dist ${PYTHON_PROJECT}
     # install modules only required to run examples
-    COMMAND ${VENV_Python3_EXECUTABLE} -m pip install protobuf
+    #COMMAND ${VENV_Python3_EXECUTABLE} -m pip install protobuf
     BYPRODUCTS ${VENV_DIR}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Create venv and install ${PYTHON_PROJECT}"

@@ -3,8 +3,10 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-#include "foo/C.pb.h"
+#include "bp11/foo/C.pb.h"
 
+//! @namespace bp11 The Foo namespace
+namespace bp11 {
 //! @namespace foo The Foo namespace
 namespace foo {
 //! @defgroup FreeFunction Free function usage.
@@ -15,12 +17,11 @@ void freeFunction(int level);
 /*! @brief Free function in foo namespace.
  * @param level Scope level.*/
 void freeFunction(int64_t level);
-//! @}
 
 //! @defgroup ProtoFunction Proto function usage.
 /*! @brief Proto function in foo namespace.
  * @param level Scope level.*/
-foo::C protoFunction(int level);
+::bp11::foo::C protoFunction(int level);
 //! @}
 
 //! @defgroup StringVector Vector of String usage.
@@ -135,3 +136,4 @@ class Foo {
   int64_t _int64Value = 0;
 };
 } // namespace foo
+} // namespace bp11

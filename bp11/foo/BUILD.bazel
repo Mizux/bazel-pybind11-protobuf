@@ -1,40 +1,46 @@
 load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_proto_library")
+load("@rules_python//python:proto.bzl", "py_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
 proto_library(
-    name = "proto_a",
+    name = "a_proto",
     srcs = ["A.proto"],
 )
 
 proto_library(
-    name = "proto_b",
+    name = "b_proto",
     srcs = ["B.proto"],
     deps = [
-      "@com_google_protobuf//:duration_proto",
+      #"@com_google_protobuf//:duration_proto",
     ],
 )
 
 proto_library(
-    name = "proto_c",
+    name = "c_proto",
     srcs = ["C.proto"],
     deps = [
-      ":proto_a",
-      ":proto_b",
+      ":a_proto",
+      ":b_proto",
     ],
 )
 
 cc_proto_library(
     name = "foo_cc_proto",
-    deps = [":proto_c"],
+    deps = [":c_proto"],
+)
+
+py_proto_library(
+    name = "foo_py_pb2",
+    deps = [":c_proto"],
 )
 
 cc_library(
     name = "foo",
     srcs = ["foo.cpp"],
-    hdrs = ["include/foo/foo.hpp"],
-    strip_include_prefix = "include",
+    hdrs = ["foo.hpp"],
+    #strip_include_prefix = "include",
     visibility = ["//visibility:public"],
     deps = [
       ":foo_cc_proto",

@@ -4,15 +4,9 @@
 import sys
 import unittest
 
-
-try:
-    import foo.python as fp
-    import foo.python.pyfoo as fpf
-    from foo.python.pyfoo import Foo
-except ImportError:
-    import bazelpybind11.foo.python as fp
-    import bazelpybind11.foo.python.pyfoo as fpf
-    from bazelpybind11.foo.python.pyfoo import Foo
+import bp11.foo.python as fp
+import bp11.foo.python.pyfoo as fpf
+from bp11.foo.python.pyfoo import Foo
 
 if __debug__:
     print(f'python path: {sys.path}')
@@ -30,7 +24,10 @@ class TestFoo(unittest.TestCase):
 
     def test_proto_function(self):
         c = fpf.proto_function(42)
-        print(c)
+        if __debug__:
+            print(f"c: {c}")
+        self.assertEqual("42", c.a.name)
+        self.assertEqual(42, c.b.value)
 
     def test_string_vector(self):
         self.assertEqual(4, fpf.string_vector_input(["1", "2", "3", "4"]))

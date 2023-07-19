@@ -1,10 +1,10 @@
-#include "foo/foo.hpp"
+#include "bp11/foo/foo.hpp"
 
 #include <iostream>
 #include <string>
 #include <utility>
 
-namespace foo {
+namespace bp11::foo {
 void freeFunction(int level) {
   std::cout << "[" << level << "] Enter " << __func__ << "(int)" << std::endl;
   std::cout << "[" << level << "] Exit " << __func__ << "(int)" << std::endl;
@@ -15,8 +15,8 @@ void freeFunction(int64_t level) {
   std::cout << "[" << level << "] Exit " << __func__ << "(int64_t)" << std::endl;
 }
 
-foo::C protoFunction(int level) {
-  foo::C c;
+::bp11::foo::C protoFunction(int level) {
+  ::bp11::foo::C c;
 
   foo::A* a = c.mutable_a();
   a->set_name(std::to_string(level));
@@ -200,4 +200,4 @@ std::string Foo::operator()() const {
          ",\"int64\":" + std::to_string(_int64Value) + "}";
 }
 
-} // namespace foo
+} // namespace bp11.foo

@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package foo;
+package bp11.foo;
 
 message A {
   string name = 1;
