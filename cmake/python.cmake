@@ -103,7 +103,8 @@ search_python_module(
   NO_VERSION)
 set(PROTO_PYS)
 set(PROTO_MYPYS)
-file(GLOB_RECURSE proto_py_files RELATIVE ${PROJECT_SOURCE_DIR} "bp11/foo/*.proto")
+file(GLOB_RECURSE proto_py_files RELATIVE ${PROJECT_SOURCE_DIR}
+  "bp11/foo/*.proto")
 ## Get Protobuf include dir
 get_target_property(protobuf_dirs protobuf::libprotobuf INTERFACE_INCLUDE_DIRECTORIES)
 foreach(dir IN LISTS protobuf_dirs)
@@ -112,7 +113,6 @@ foreach(dir IN LISTS protobuf_dirs)
     list(APPEND PROTO_DIRS "--proto_path=${dir}")
   endif()
 endforeach()
-
 foreach(PROTO_FILE IN LISTS proto_py_files)
   message(STATUS "protoc(py) .proto: ${PROTO_FILE}")
   get_filename_component(PROTO_DIR ${PROTO_FILE} DIRECTORY)
@@ -136,7 +136,6 @@ foreach(PROTO_FILE IN LISTS proto_py_files)
   list(APPEND PROTO_PYS ${PROTO_PY})
   list(APPEND PROTO_MYPYS ${PROTO_MYPY})
 endforeach()
-
 add_custom_target(Py${PROJECT_NAME}_proto
   DEPENDS
     ${PROTO_PYS}
@@ -193,9 +192,9 @@ add_custom_command(
     python/setup.py.in
   DEPENDS
     python/setup.py
-    ${PROJECT_NAMESPACE}::foo
-    ${PROJECT_NAMESPACE}::foo_pybind11
     Py${PROJECT_NAME}_proto
+    ${PROJECT_NAMESPACE}::foo
+    foo_pybind11
   BYPRODUCTS
     python/${PYTHON_PROJECT}
     python/${PYTHON_PROJECT}.egg-info
@@ -248,7 +247,7 @@ endif()
 # Parameters:
 #  the python filename
 # e.g.:
-# add_python_test(foo.py)
+# add_python_test(bp11/foo/python/foo_test.py)
 function(add_python_test FILE_NAME)
   message(STATUS "Configuring test ${FILE_NAME} ...")
   get_filename_component(EXAMPLE_NAME ${FILE_NAME} NAME_WE)
