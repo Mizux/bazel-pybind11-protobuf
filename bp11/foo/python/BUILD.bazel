@@ -18,7 +18,7 @@ py_test(
     python_version = "PY3",
     deps = [
         ":pyfoo",
-        "//bp11/foo:foo_py_pb2",
+        "//bp11/foo:c_py_pb2",
     ],
     tags = ["unit"],
 )

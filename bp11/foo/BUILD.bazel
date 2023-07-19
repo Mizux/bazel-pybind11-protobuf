@@ -4,11 +4,23 @@ load("@rules_python//python:proto.bzl", "py_proto_library")
 
 package(default_visibility = ["//visibility:public"])
 
+# A.proto
 proto_library(
     name = "a_proto",
     srcs = ["A.proto"],
 )
 
+cc_proto_library(
+    name = "a_cc_proto",
+    deps = [":a_proto"],
+)
+
+py_proto_library(
+    name = "a_py_pb2",
+    deps = [":a_proto"],
+)
+
+# B.proto
 proto_library(
     name = "b_proto",
     srcs = ["B.proto"],
@@ -17,6 +29,19 @@ proto_library(
     ],
 )
 
+cc_proto_library(
+    name = "b_cc_proto",
+    deps = [":b_proto"],
+)
+
+py_proto_library(
+    name = "b_py_pb2",
+    deps = [
+      ":b_proto",
+    ],
+)
+
+# C.proto
 proto_library(
     name = "c_proto",
     srcs = ["C.proto"],
@@ -27,12 +52,12 @@ proto_library(
 )
 
 cc_proto_library(
-    name = "foo_cc_proto",
+    name = "c_cc_proto",
     deps = [":c_proto"],
 )
 
 py_proto_library(
-    name = "foo_py_pb2",
+    name = "c_py_pb2",
     deps = [":c_proto"],
 )
 
@@ -43,7 +68,7 @@ cc_library(
     #strip_include_prefix = "include",
     visibility = ["//visibility:public"],
     deps = [
-      ":foo_cc_proto",
+      ":c_cc_proto",
     ],
 )
 
