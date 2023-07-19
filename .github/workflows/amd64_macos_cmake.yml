@@ -22,6 +22,8 @@ jobs:
       INSTALL_TARGET: ${{ matrix.build[4] }}
     steps:
       - uses: actions/checkout@v3
+      - name: Update Path
+        run: echo "$HOME/Library/Python/3.11/bin" >> $GITHUB_PATH
       - name: Check cmake
         run: cmake --version
       - name: Configure
