@@ -25,7 +25,7 @@ proto_library(
     name = "b_proto",
     srcs = ["B.proto"],
     deps = [
-      #"@com_google_protobuf//:duration_proto",
+      "@com_google_protobuf//:duration_proto",
     ],
 )
 
