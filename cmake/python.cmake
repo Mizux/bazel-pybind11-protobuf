@@ -122,7 +122,7 @@ foreach(PROTO_FILE IN LISTS proto_py_files)
   message(STATUS "protoc(py) py: ${PROTO_PY}")
   message(STATUS "protoc(py) mypy: ${PROTO_MYPY}")
   add_custom_command(
-    OUTPUT ${PROTO_PY}
+    OUTPUT ${PROTO_PY} ${PROTO_MYPY}
     COMMAND ${PROTOC_PRG}
     "--proto_path=${PROJECT_SOURCE_DIR}"
     ${PROTO_DIRS}
