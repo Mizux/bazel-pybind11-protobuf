@@ -10,8 +10,12 @@ ENV CC=gcc CXX=g++
 
 # Install Python
 RUN zypper update -y \
-&& zypper install -y python3 python3-pip python3-devel \
+&& zypper install -y \
+ python3 python3-devel python3-pip python3-wheel \
+ python3-virtualenv \
+ python3-numpy python3-pandas \
 && zypper clean -a
+RUN python3 -m pip install absl-py mypy-protobuf
 
 # Add the library src to our build env
 FROM env AS devel
