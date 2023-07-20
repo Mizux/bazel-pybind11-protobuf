@@ -11,9 +11,11 @@ RUN apt-get update -qq \
 # Install Python
 RUN apt-get update -qq \
 && apt-get install -yq \
- python3-dev python3-pip python3-venv python3-virtualenv \
+ python3-dev python3-pip python3-wheel \
+ python3-venv python3-virtualenv \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN python3 -m pip install --break-system-package absl-py mypy-protobuf numpy pandas
 
 # Add the library src to our build env
 FROM env AS devel
