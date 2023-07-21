@@ -28,6 +28,7 @@ setup(
   ],
   package_data={
   '@PYTHON_PROJECT@':[$<$<NOT:$<PLATFORM_ID:Windows>>:'.libs/*'>],
+  '@PYTHON_PROJECT@.foo':['*.pyi'],
   '@PYTHON_PROJECT@.foo.python':['$<TARGET_FILE_NAME:foo_pybind11>', '*.pyi'],
   },
   include_package_data=True,
