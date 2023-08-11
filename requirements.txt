@@ -4,27 +4,27 @@
 #
 #    bazel run //:requirements.update
 #
-black==23.3.0
+black==23.7.0
     # via -r requirements.in
 click==8.1.4
     # via black
 mypy-extensions==1.0.0
     # via black
-mypy-protobuf==3.4.0
+mypy-protobuf==3.5.0
     # via -r requirements.in
-numpy==1.24.3
+numpy==1.25.2
     # via
     #   -r requirements.in
     #   pandas
 packaging==23.1
     # via black
-pandas==1.5.3
+pandas==2.0.3
     # via -r requirements.in
 pathspec==0.11.1
     # via black
 platformdirs==3.8.1
     # via black
-protobuf==4.23.3
+protobuf==4.24.0
     # via
     #   -r requirements.in
     #   mypy-protobuf
@@ -34,5 +34,7 @@ pytz==2023.3
     # via pandas
 six==1.16.0
     # via python-dateutil
-types-protobuf==4.23.0.1
+types-protobuf==4.24.0.0
     # via mypy-protobuf
+tzdata==2023.3
+    # via pandas
