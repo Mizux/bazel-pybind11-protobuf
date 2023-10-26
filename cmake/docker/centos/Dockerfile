@@ -16,7 +16,8 @@ RUN dnf -y update \
  python3.11-numpy \
 && dnf clean all \
 && rm -rf /var/cache/dnf
-RUN python3.11 -m pip install absl-py mypy-protobuf pandas
+RUN python3.11 -m pip install \
+ absl-py mypy mypy-protobuf pandas
 
 # Add the library src to our build env
 FROM env AS devel

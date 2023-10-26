@@ -11,7 +11,7 @@ RUN apk add --no-cache \
  py3-virtualenv \
  py3-numpy py3-pandas
 RUN python3 -m pip install --break-system-package \
- absl-py mypy-protobuf
+ absl-py mypy mypy-protobuf
 
 # Add the library src to our build env
 FROM env AS devel
@@ -31,8 +31,8 @@ RUN cmake --build build --target test -v
 FROM env AS install_env
 COPY --from=build /home/project/build/python/dist/*.whl ./
 RUN python3 -m pip install \
- --find-links=. \
  --break-system-packages \
+ --find-links=. \
  bp11*.whl
 
 FROM install_env AS install_devel

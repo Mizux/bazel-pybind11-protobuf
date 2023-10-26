@@ -10,7 +10,8 @@ RUN pacman -Syu --noconfirm \
  python python-pip python-wheel \
  python-virtualenv \
  python-numpy python-pandas
-RUN python3 -m pip install --break-system-package absl-py mypy-protobuf
+RUN python3 -m pip install --break-system-package \
+ absl-py mypy mypy-protobuf
 
 # Add the library src to our build env
 FROM env AS devel

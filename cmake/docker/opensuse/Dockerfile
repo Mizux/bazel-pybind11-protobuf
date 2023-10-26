@@ -15,7 +15,8 @@ RUN zypper update -y \
  python3-virtualenv \
  python3-numpy python3-pandas \
 && zypper clean -a
-RUN python3 -m pip install absl-py mypy-protobuf
+RUN python3 -m pip install \
+ absl-py mypy mypy-protobuf
 
 # Add the library src to our build env
 FROM env AS devel
@@ -35,6 +36,7 @@ RUN cmake --build build --target test -v
 FROM env AS install_env
 COPY --from=build /home/project/build/python/dist/*.whl ./
 RUN python3 -m pip install \
+ --break-system-packages \
  --find-links=. \
  bp11*.whl
 

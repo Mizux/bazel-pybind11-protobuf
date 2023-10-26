@@ -16,7 +16,8 @@ RUN dnf -y update \
  python3-virtualenv \
  python3-numpy python3-pandas \
 && dnf clean all
-RUN python3 -m pip install absl-py mypy-protobuf
+RUN python3 -m pip install \
+ absl-py mypy mypy-protobuf
 
 # Add the library src to our build env
 FROM env AS devel

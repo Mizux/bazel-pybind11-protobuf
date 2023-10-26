@@ -17,7 +17,8 @@ RUN apt-get update -qq \
  python3-venv python3-virtualenv \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN python3 -m pip install --break-system-package absl-py mypy-protobuf numpy pandas
+RUN python3 -m pip install --break-system-package \
+ absl-py mypy mypy-protobuf numpy pandas
 
 FROM env AS devel
 WORKDIR /home/project
