@@ -1,11 +1,12 @@
 workspace(name = "org_mizux_bazelpybind11protobuf")
+
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
 # Bazel Extensions
 ## Bazel Skylib rules.
 git_repository(
     name = "bazel_skylib",
-    tag = "1.4.1",
+    tag = "1.5.0",
     remote = "https://github.com/bazelbuild/bazel-skylib.git",
 )
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
@@ -14,13 +15,13 @@ bazel_skylib_workspace()
 ## Bazel rules.
 git_repository(
     name = "platforms",
-    tag = "0.0.6",
+    tag = "0.0.8",
     remote = "https://github.com/bazelbuild/platforms.git",
 )
 
 git_repository(
     name = "rules_cc",
-    tag = "0.0.6",
+    tag = "0.0.9",
     remote = "https://github.com/bazelbuild/rules_cc.git",
 )
 
@@ -32,7 +33,7 @@ git_repository(
 
 git_repository(
     name = "rules_python",
-    tag = "0.24.0",
+    tag = "0.27.1",
     remote = "https://github.com/bazelbuild/rules_python.git",
 )
 
@@ -48,15 +49,15 @@ new_git_repository(
 ## Re2
 git_repository(
     name = "com_google_re2",
-    tag = "2023-03-01",
+    tag = "2023-11-01",
     remote = "https://github.com/google/re2.git",
 )
 
 ## Abseil-cpp
 git_repository(
     name = "com_google_absl",
-    tag = "20230125.3",
-    patches = ["//patches:abseil-cpp-20230125.3.patch"],
+    tag = "20230802.1",
+    patches = ["//patches:abseil-cpp-20230802.1.patch"],
     patch_args = ["-p1"],
     remote = "https://github.com/abseil/abseil-cpp.git",
 )
@@ -64,9 +65,7 @@ git_repository(
 ## Protobuf
 git_repository(
     name = "com_google_protobuf",
-    tag = "v23.3",
-    patches = ["//patches:protobuf-v23.3.patch"],
-    patch_args = ["-p1"],
+    tag = "v25.1",
     remote = "https://github.com/protocolbuffers/protobuf.git",
 )
 # Load common dependencies.
@@ -82,7 +81,7 @@ py_repositories()
 load("@rules_python//python:pip.bzl", "pip_parse")
 pip_parse(
    name = "pip_deps",
-   requirements = "//:requirements.txt",
+   requirements_lock = "//:requirements.txt",
 )
 
 load("@pip_deps//:requirements.bzl", install_pip_deps="install_deps")
@@ -99,16 +98,20 @@ git_repository(
 new_git_repository(
     name = "pybind11",
     build_file = "@pybind11_bazel//:pybind11.BUILD",
-    tag = "v2.10.3",
+    tag = "v2.11.1",
     remote = "https://github.com/pybind/pybind11.git",
 )
 
 new_git_repository(
     name = "pybind11_protobuf",
-    #build_file = "@pybind11_bazel//:pybind11.BUILD",
-    #tag = "v2.10.3",
-    commit = "5baa2dc9d93e3b608cde86dfa4b8c63aeab4ac78",
+    commit = "8359a091a9b0bc7deb0233de986c06c885a3ff2d",
     remote = "https://github.com/pybind/pybind11_protobuf.git",
+)
+
+new_git_repository(
+    name = "pybind11_abseil",
+    remote = "https://github.com/pybind/pybind11_abseil.git",
+    commit = "2c4932ed6f6204f1656e245838f4f5eae69d2e29"
 )
 
 load("@pybind11_bazel//:python_configure.bzl", "python_configure")

@@ -1,7 +1,8 @@
 exports_files([
-    "zlib.patch",
-    "abseil-cpp-20230125.3.patch",
-    "protobuf-v23.3.patch",
+    "ZLIB.patch",
+    "abseil-cpp-20230802.1.patch",
+    "protobuf-v25.1.patch",
+    "pybind11.patch",
     "pybind11_bazel.patch",
     "pybind11_protobuf.patch",
 ])
