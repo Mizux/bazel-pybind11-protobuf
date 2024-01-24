@@ -63,8 +63,13 @@ git_repository(
 )
 
 ## Protobuf
+# proto_library and cc_proto_library rules implicitly
+# depend on @com_google_protobuf for protoc and proto runtimes.
+# This statement defines the @com_google_protobuf repo.
 git_repository(
     name = "com_google_protobuf",
+    patches = ["//patches:protobuf-v25.1.patch"],
+    patch_args = ["-p1"],
     tag = "v25.1",
     remote = "https://github.com/protocolbuffers/protobuf.git",
 )
@@ -89,7 +94,7 @@ install_pip_deps()
 
 git_repository(
     name = "pybind11_bazel",
-    commit = "fc56ce8a8b51e3dd941139d329b63ccfea1d304b",
+    commit = "23926b00e2b2eb2fc46b17e587cf0c0cfd2f2c4b", # 2023/11/29
     patches = ["//patches:pybind11_bazel.patch"],
     patch_args = ["-p1"],
     remote = "https://github.com/pybind/pybind11_bazel.git",
@@ -104,14 +109,8 @@ new_git_repository(
 
 new_git_repository(
     name = "pybind11_protobuf",
-    commit = "8359a091a9b0bc7deb0233de986c06c885a3ff2d",
+    commit = "3b11990a99dea5101799e61d98a82c4737d240cc", # 2024/01/04
     remote = "https://github.com/pybind/pybind11_protobuf.git",
-)
-
-new_git_repository(
-    name = "pybind11_abseil",
-    remote = "https://github.com/pybind/pybind11_abseil.git",
-    commit = "2c4932ed6f6204f1656e245838f4f5eae69d2e29"
 )
 
 load("@pybind11_bazel//:python_configure.bzl", "python_configure")
