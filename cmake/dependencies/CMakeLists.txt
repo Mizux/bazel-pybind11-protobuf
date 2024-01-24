@@ -32,12 +32,12 @@ if(BUILD_absl)
   set(ABSL_USE_SYSTEM_INCLUDES ON)
   set(ABSL_PROPAGATE_CXX_STD ON)
   FetchContent_Declare(
-    absl
+    abseil-cpp
     GIT_REPOSITORY "https://github.com/abseil/abseil-cpp.git"
     GIT_TAG "20230802.1"
     PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/abseil-cpp-20230802.1.patch"
   )
-  FetchContent_MakeAvailable(absl)
+  FetchContent_MakeAvailable(abseil-cpp)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
 endif()
@@ -77,7 +77,7 @@ if(BUILD_pybind11)
   FetchContent_Declare(
     pybind11
     GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
-    GIT_TAG "v2.10.3"
+    GIT_TAG "v2.11.1"
     PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11.patch"
   )
   FetchContent_MakeAvailable(pybind11)
@@ -94,7 +94,7 @@ if(BUILD_pybind11_protobuf)
   FetchContent_Declare(
     pybind11_protobuf
     GIT_REPOSITORY "https://github.com/pybind/pybind11_protobuf.git"
-    GIT_TAG "8359a091a9b0bc7deb0233de986c06c885a3ff2d"
+    GIT_TAG "3b11990a99dea5101799e61d98a82c4737d240cc" # 2024/01/04
     PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11_protobuf.patch"
   )
   FetchContent_MakeAvailable(pybind11_protobuf)
