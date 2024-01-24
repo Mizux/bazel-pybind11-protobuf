@@ -16,6 +16,7 @@ RUN zypper update -y \
  python3-numpy python3-pandas \
 && zypper clean -a
 RUN python3 -m pip install \
+ --break-system-packages \
  absl-py mypy mypy-protobuf
 
 # Add the library src to our build env
