@@ -18,7 +18,7 @@ ENV JAVA_HOME=/usr/lib/jvm/default-jvm
 ENV PATH=$JAVA_HOME/bin:$PATH
 
 # Install Python
-RUN apk add --no-cache python3-dev py3-pip py3-wheel \
+RUN apk add --no-cache openssl python3-dev py3-pip py3-wheel \
  py3-numpy py3-pandas
 RUN python3 -m pip install --break-system-package \
  absl-py mypy-protobuf
