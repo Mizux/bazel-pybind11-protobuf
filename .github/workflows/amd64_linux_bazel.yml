@@ -51,3 +51,4 @@ jobs:
           -c opt
           --test_output=all
           ...
+          -- -//:requirements_test
