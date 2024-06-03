@@ -1,6 +1,6 @@
 # Create a virtual environment with all tools installed
-# ref: https://quay.io/repository/centos/centos
-FROM quay.io/centos/centos:stream AS env
+# ref: https://hub.docker.com/_/almalinux
+FROM almalinux:latest AS env
 # Install system build dependencies
 ENV PATH=/usr/local/bin:$PATH
 RUN dnf -y update \
@@ -12,11 +12,10 @@ CMD [ "/usr/bin/bash" ]
 
 # Install Python
 RUN dnf -y update \
-&& dnf -y install python3.11-devel python3.11-pip python3.11-wheel \
- python3.11-numpy \
+&& dnf -y install python3-devel python3-pip python3-numpy \
 && dnf clean all \
 && rm -rf /var/cache/dnf
-RUN python3.11 -m pip install \
+RUN python3 -m pip install \
  absl-py mypy mypy-protobuf pandas
 
 # Add the library src to our build env
