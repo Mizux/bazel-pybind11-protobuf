@@ -1,8 +1,10 @@
 # Code dependencies
-numpy==1.25.2
-pandas==2.0.3
+numpy==1.26.1
+protobuf==5.26.1
 
-protobuf==4.24.0
+mypy==1.6.1
 mypy-protobuf==3.5.0
+black==24.3.0
 
-black==23.7.0
+# Example dependencies
+pandas==2.1.2
