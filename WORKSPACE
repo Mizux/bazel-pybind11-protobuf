@@ -15,7 +15,7 @@ bazel_skylib_workspace()
 ## Bazel rules.
 git_repository(
     name = "platforms",
-    tag = "0.0.8",
+    tag = "0.0.9",
     remote = "https://github.com/bazelbuild/platforms.git",
 )
 
@@ -33,7 +33,7 @@ git_repository(
 
 git_repository(
     name = "rules_python",
-    tag = "0.27.1",
+    tag = "0.31.0",
     remote = "https://github.com/bazelbuild/rules_python.git",
 )
 
@@ -42,24 +42,25 @@ git_repository(
 new_git_repository(
     name = "zlib",
     build_file = "@com_google_protobuf//:third_party/zlib.BUILD",
-    tag = "v1.2.13",
+    tag = "v1.3.1",
     remote = "https://github.com/madler/zlib.git",
-)
-
-## Re2
-git_repository(
-    name = "com_google_re2",
-    tag = "2023-11-01",
-    remote = "https://github.com/google/re2.git",
 )
 
 ## Abseil-cpp
 git_repository(
     name = "com_google_absl",
-    tag = "20230802.1",
-    patches = ["//patches:abseil-cpp-20230802.1.patch"],
+    tag = "20240116.2",
+    patches = ["//patches:abseil-cpp-20240116.2.patch"],
     patch_args = ["-p1"],
     remote = "https://github.com/abseil/abseil-cpp.git",
+)
+
+## Re2
+git_repository(
+    name = "com_google_re2",
+    tag = "2024-04-01",
+    remote = "https://github.com/google/re2.git",
+    repo_mapping = {"@abseil-cpp": "@com_google_absl"},
 )
 
 ## Protobuf
@@ -68,9 +69,9 @@ git_repository(
 # This statement defines the @com_google_protobuf repo.
 git_repository(
     name = "com_google_protobuf",
-    patches = ["//patches:protobuf-v25.1.patch"],
+    patches = ["//patches:protobuf-v26.1.patch"],
     patch_args = ["-p1"],
-    tag = "v25.1",
+    tag = "v26.1",
     remote = "https://github.com/protocolbuffers/protobuf.git",
 )
 # Load common dependencies.
@@ -92,6 +93,14 @@ pip_parse(
 load("@pip_deps//:requirements.bzl", install_pip_deps="install_deps")
 install_pip_deps()
 
+# Protobuf
+load("@com_google_protobuf//bazel:system_python.bzl", "system_python")
+system_python(
+    name = "system_python",
+    minimum_python_version = "3.8",
+)
+
+## `pybind11_bazel`
 git_repository(
     name = "pybind11_bazel",
     commit = "23926b00e2b2eb2fc46b17e587cf0c0cfd2f2c4b", # 2023/11/29
@@ -103,7 +112,7 @@ git_repository(
 new_git_repository(
     name = "pybind11",
     build_file = "@pybind11_bazel//:pybind11.BUILD",
-    tag = "v2.11.1",
+    tag = "v2.12.0",
     remote = "https://github.com/pybind/pybind11.git",
 )
 
@@ -123,6 +132,6 @@ bind(
 ## Testing
 git_repository(
     name = "com_google_googletest",
-    tag = "v1.13.0",
+    tag = "v1.14.0",
     remote = "https://github.com/google/googletest.git",
 )
