@@ -26,9 +26,9 @@ help:
 	@echo -e "\t${BOLD}clean_native${RESET}: Remove ALL caches and docker images."
 	@echo
 	@echo -e "\tWith ${BOLD}<distro>${RESET}:"
+	@echo -e "\t\t${BOLD}almalinux${RESET} (latest)"
 	@echo -e "\t\t${BOLD}alpine${RESET} (edge)"
 	@echo -e "\t\t${BOLD}archlinux${RESET} (latest)"
-	@echo -e "\t\t${BOLD}centos${RESET} (latest)"
 	@echo -e "\t\t${BOLD}debian${RESET} (latest)"
 	@echo -e "\t\t${BOLD}fedora${RESET} (latest)"
 	@echo -e "\t\t${BOLD}opensuse${RESET} (tumbleweed)"
@@ -103,7 +103,7 @@ endif
 DOCKER_RUN_CMD := docker run --rm --init --net=host
 
 # Currently supported distro
-DISTROS := alpine archlinux centos debian fedora opensuse ubuntu
+DISTROS := almalinux alpine archlinux debian fedora opensuse ubuntu
 
 # $* stem
 # $< first prerequist
