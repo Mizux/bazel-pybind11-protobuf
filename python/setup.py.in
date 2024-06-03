@@ -21,10 +21,10 @@ setup(
   url='https://github.com/Mizux/bazel-pybind11-protobuf',
   distclass=BinaryDistribution,
   cmdclass={'install': InstallPlatlib},
-  python_requires='>= 3.7',
+  python_requires='>= 3.8',
   packages=find_packages(),
   install_requires=[
-    'protobuf >= 4.23.3',
+    'protobuf >= 5.26.1',
   ],
   package_data={
   '@PYTHON_PROJECT@':[$<$<NOT:$<PLATFORM_ID:Windows>>:'.libs/*'>],
