@@ -39,4 +39,5 @@ FROM build AS test
 RUN bazel test \
  -c opt \
  --test_output=errors \
- ...
+ ... \
+ -- -//:requirements_test
