@@ -5,14 +5,14 @@ set_target_properties(foo_pybind11 PROPERTIES
 if(APPLE)
   set_target_properties(foo_pybind11 PROPERTIES
     SUFFIX ".so"
-    INSTALL_RPATH "@loader_path;@loader_path/../../../${PYTHON_PROJECT}/.libs"
+    INSTALL_RPATH "@loader_path;@loader_path/../../../${PYTHON_PROJECT}/.libs;@loader_path/../../../pybind11_abseil"
     )
   set_property(TARGET foo_pybind11 APPEND PROPERTY
     LINK_FLAGS "-flat_namespace -undefined suppress"
     )
 elseif(UNIX)
   set_target_properties(foo_pybind11 PROPERTIES
-    INSTALL_RPATH "$ORIGIN:$ORIGIN/../../../${PYTHON_PROJECT}/.libs"
+    INSTALL_RPATH "$ORIGIN:$ORIGIN/../../../${PYTHON_PROJECT}/.libs:$ORIGIN/../../../pybind11_abseil"
     )
 endif()
 target_include_directories(foo_pybind11 PRIVATE
