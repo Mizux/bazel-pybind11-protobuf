@@ -34,12 +34,12 @@ if(BUILD_absl)
   set(ABSL_PROPAGATE_CXX_STD ON)
   set(ABSL_BUILD_TESTING OFF)
   FetchContent_Declare(
-    abseil-cpp
+    absl
     GIT_REPOSITORY "https://github.com/abseil/abseil-cpp.git"
     GIT_TAG "20240116.2"
     PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/abseil-cpp-20240116.2.patch"
   )
-  FetchContent_MakeAvailable(abseil-cpp)
+  FetchContent_MakeAvailable(absl)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
 endif()
@@ -57,13 +57,19 @@ if(BUILD_Protobuf)
   FetchContent_Declare(
     Protobuf
     GIT_REPOSITORY "https://github.com/protocolbuffers/protobuf.git"
-    GIT_TAG "v26.1"
+    GIT_TAG "v27.2"
     GIT_SUBMODULES ""
-    PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/protobuf-v26.1.patch")
+    PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/protobuf-v27.2.patch")
   FetchContent_MakeAvailable(Protobuf)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
 endif()
+
+# ##############################################################################
+# pybind11
+# ##############################################################################
+# Find Python 3
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
 
 # ##############################################################################
 # RE2
@@ -83,12 +89,6 @@ if(BUILD_re2)
   message(CHECK_PASS "fetched")
 endif()
 
-# ##############################################################################
-# pybind11
-# ##############################################################################
-# Find Python 3
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
-
 if(BUILD_pybind11)
   message(CHECK_START "Fetching pybind11")
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
@@ -98,10 +98,24 @@ if(BUILD_pybind11)
   FetchContent_Declare(
     pybind11
     GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
-    GIT_TAG "v2.12.0"
+    GIT_TAG "v2.13.1"
     PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11.patch"
   )
   FetchContent_MakeAvailable(pybind11)
+  list(POP_BACK CMAKE_MESSAGE_INDENT)
+  message(CHECK_PASS "fetched")
+endif()
+
+if(BUILD_pybind11_abseil)
+  message(CHECK_START "Fetching pybind11_abseil")
+  list(APPEND CMAKE_MESSAGE_INDENT "  ")
+  FetchContent_Declare(
+    pybind11_abseil
+    GIT_REPOSITORY "https://github.com/pybind/pybind11_abseil.git"
+    GIT_TAG "v202402.0"
+    PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11_abseil.patch"
+  )
+  FetchContent_MakeAvailable(pybind11_abseil)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
 endif()

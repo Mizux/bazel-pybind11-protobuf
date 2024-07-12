@@ -15,6 +15,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Set max os target version.
+set(CMAKE_OSX_DEPLOYMENT_TARGET 10.15)
+
 # Default Build Type to be Release
 get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(isMultiConfig)
@@ -67,19 +70,19 @@ if(MSVC AND BUILD_SHARED_LIBS)
   set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 endif()
 
-# Disable CTest targets
-set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
-include(CTest)
-
 # Build deps
 option(BUILD_ZLIB "Build the ZLIB dependency Library" ON)
 message(STATUS "Build ZLIB: ${BUILD_ZLIB}")
 
 option(BUILD_absl "Build the abseil-cpp dependency Library" ON)
-message(STATUS "Build abseil-cpp: ${BUILD_absl}")
+message(STATUS "Build absl: ${BUILD_absl}")
 
 option(BUILD_Protobuf "Build the Protobuf dependency Library" ON)
 message(STATUS "Build protobuf: ${BUILD_Protobuf}")
+
+# Disable CTest targets
+set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
+include(CTest)
 
 if(BUILD_TESTING)
   option(BUILD_re2 "Build the re2 dependency Library" ON)
@@ -95,8 +98,13 @@ endif()
 
 option(BUILD_pybind11 "Build pybind11 library" ON)
 message(STATUS "Build pybind11: ${BUILD_pybind11}")
+option(BUILD_pybind11_abseil "Build the pybind11_abseil dependency Library" ON)
+message(STATUS "Python: Build pybind11_abseil: ${BUILD_pybind11_abseil}")
 option(BUILD_pybind11_protobuf "Build the pybind11_protobuf dependency Library" ON)
 message(STATUS "Python: Build pybind11_protobuf: ${BUILD_pybind11_protobuf}")
+
+option(GENERATE_PYTHON_STUB "Generate Python stub file (.pyi)" ON)
+message(STATUS "Python: Generate stub file: ${GENERATE_PYTHON_STUB}")
 
 option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
 message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")

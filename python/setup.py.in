@@ -2,29 +2,26 @@ from setuptools import find_packages, setup
 from setuptools.dist import Distribution
 
 class BinaryDistribution(Distribution):
-  def is_pure(self):
-    return False
-  def has_ext_modules(self):
-    return True
+    def is_pure(self):
+        return False
+
+    def has_ext_modules(self):
+        return True
 
 from setuptools.command.install import install
 class InstallPlatlib(install):
     def finalize_options(self):
         install.finalize_options(self)
-        self.install_lib=self.install_platlib
+        self.install_lib = self.install_platlib
 
 setup(
   name='@PYTHON_PROJECT@',
   version='@PROJECT_VERSION@',
-  author='Mizux',
-  author_email='\"Mizux Seiha\" <mizux.dev@gmail.com>',
   url='https://github.com/Mizux/bazel-pybind11-protobuf',
-  distclass=BinaryDistribution,
-  cmdclass={'install': InstallPlatlib},
   python_requires='>= 3.8',
   packages=find_packages(),
   install_requires=[
-    'protobuf >= 5.26.1',
+    'protobuf >= 5.27.2',
   ],
   package_data={
   '@PYTHON_PROJECT@':[$<$<NOT:$<PLATFORM_ID:Windows>>:'.libs/*'>],
@@ -33,6 +30,8 @@ setup(
   },
   include_package_data=True,
   license='Apache 2.0',
+  author='Mizux',
+  author_email='\"Mizux Seiha\" <mizux.dev@gmail.com>',
   classifiers=[
   'Development Status :: 5 - Production/Stable',
   'Environment :: Console',
@@ -47,4 +46,6 @@ setup(
   'Topic :: Scientific/Engineering',
   'Topic :: Software Development :: Libraries :: Python Modules'
   ],
+  distclass=BinaryDistribution,
+  cmdclass={'install': InstallPlatlib},
 )
