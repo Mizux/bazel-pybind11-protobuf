@@ -1,6 +1,7 @@
 # Create a virtual environment with all tools installed
-# ref: https://hub.docker.com/_/almalinux
-FROM almalinux:latest AS env
+# ref: https://hub.docker.com/_/rockylinux
+FROM rockylinux:9 AS env
+
 # Install system build dependencies
 ENV PATH=/usr/local/bin:$PATH
 RUN dnf -y update \
@@ -16,7 +17,7 @@ RUN dnf -y update \
 && dnf clean all \
 && rm -rf /var/cache/dnf
 RUN python3 -m pip install \
- absl-py mypy mypy-protobuf
+ absl-py mypy
 
 # Add the library src to our build env
 FROM env AS devel
