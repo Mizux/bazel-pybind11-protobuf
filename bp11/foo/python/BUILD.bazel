@@ -21,6 +21,7 @@ py_test(
     deps = [
       ":pyfoo",
       requirement("absl-py"),
+      "//bp11/foo:c_py_pb2",
       "@org_pybind11_abseil//pybind11_abseil:status",
     ],
     imports = [

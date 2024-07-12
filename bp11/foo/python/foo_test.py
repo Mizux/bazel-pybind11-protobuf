@@ -6,6 +6,7 @@ import datetime
 from absl.testing import absltest
 
 from pybind11_abseil import status
+from bp11.foo import C_pb2
 
 import bp11.foo.python as fp
 import bp11.foo.python.pyfoo as fpf
