@@ -6,9 +6,28 @@
 #include <string>
 
 namespace bp11::foo {
-TEST(FooTest, FreeFunction) {
-  EXPECT_NO_THROW(freeFunction(42));
-  EXPECT_NO_THROW(freeFunction(int64_t{42}));
+TEST(FooTest, AbslFunction) {
+  auto good = abslFunction("good");
+  EXPECT_TRUE(good.ok());
+
+  auto bad = abslFunction("error");
+  EXPECT_FALSE(bad.ok());
+}
+
+TEST(FooTest, AbslDuration) {
+  auto hour = MakeDuration(3600);
+  EXPECT_EQ(hour, absl::Hours(1));
+  EXPECT_TRUE(CheckDuration(hour, 3600));
+
+  auto duration = MakeInfiniteDuration();
+  EXPECT_EQ(duration, absl::InfiniteDuration());
+  EXPECT_TRUE(IsInfiniteDuration(duration));
+  EXPECT_FALSE(IsInfiniteDuration(MakeDuration(123)));
+}
+
+TEST(FooTest, AbslTime) {
+  auto time = MakeTime(3600);
+  EXPECT_TRUE(CheckDatetime(time, 3600));
 }
 
 TEST(FooTest, ProtoFunction) {
@@ -17,6 +36,11 @@ EXPECT_TRUE(c.has_a());
 EXPECT_EQ(c.a().name(), std::to_string(42));
 EXPECT_TRUE(c.has_b());
 EXPECT_EQ(c.b().value(), 42);
+}
+
+TEST(FooTest, FreeFunction) {
+  EXPECT_NO_THROW(freeFunction(42));
+  EXPECT_NO_THROW(freeFunction(int64_t{42}));
 }
 
 TEST(FooTest, StringVectorOutput) {

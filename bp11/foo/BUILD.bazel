@@ -69,6 +69,8 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = [
       ":c_cc_proto",
+      "@com_google_absl//absl/status",
+      "@com_google_absl//absl/strings:string_view",
     ],
 )
 

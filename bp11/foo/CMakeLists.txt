@@ -13,7 +13,12 @@ target_compile_features(foo PUBLIC cxx_std_17)
 set_target_properties(foo PROPERTIES
   VERSION ${PROJECT_VERSION}
   PUBLIC_HEADER "foo.hpp;${PROTO_HDRS}")
-target_link_libraries(foo PUBLIC protobuf::libprotobuf)
+target_link_libraries(foo PUBLIC
+  absl::strings
+  absl::status
+  absl::time
+  protobuf::libprotobuf
+)
 add_library(${PROJECT_NAMESPACE}::foo ALIAS foo)
 
 # Test
