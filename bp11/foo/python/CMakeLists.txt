@@ -19,8 +19,11 @@ target_include_directories(foo_pybind11 PRIVATE
   ${protobuf_SOURCE_DIR})
 target_link_libraries(foo_pybind11 PRIVATE
   ${PROJECT_NAMESPACE}::foo
+  pybind11_abseil::absl_casters
+  pybind11_abseil::status_casters
   pybind11_native_proto_caster
 )
 add_library(${PROJECT_NAMESPACE}::foo_pybind11 ALIAS foo_pybind11)
 
 add_python_test(${CMAKE_CURRENT_SOURCE_DIR}/foo_test.py)
+add_python_test(${CMAKE_CURRENT_SOURCE_DIR}/status_test.py)

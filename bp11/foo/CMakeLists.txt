@@ -1,5 +1,4 @@
 add_library(foo)
-
 get_cpp_proto(PROTO_HDRS PROTO_SRCS)
 target_sources(foo PRIVATE
     foo.hpp foo.cpp

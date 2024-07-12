@@ -2,8 +2,8 @@
 #include <pybind11/stl.h>
 #include <pybind11/stl_bind.h>
 
-//#include "pybind11_abseil/absl_casters.h"
-//#include "pybind11_abseil/status_casters.h"
+#include "pybind11_abseil/absl_casters.h"
+#include "pybind11_abseil/status_casters.h"
 #include "pybind11_protobuf/native_proto_caster.h"
 
 #include "bp11/foo/foo.hpp"
