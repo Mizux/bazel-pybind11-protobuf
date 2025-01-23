@@ -1,15 +1,18 @@
 # Python wrapper for foo library.
 load("@rules_python//python:defs.bzl", "py_test")
+
 load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
-load("@pip_deps//:requirements.bzl", "requirement")
+
+load("@pypi//:requirements.bzl", "requirement")
 
 pybind_extension(
     name = "pyfoo",
     srcs = ["foo.cpp"],
     deps = [
         "//bp11/foo:foo",
-        "@org_pybind11_abseil//pybind11_abseil:absl_casters",
-        "@org_pybind11_abseil//pybind11_abseil:status_casters",
+        "@pybind11_abseil//pybind11_abseil:import_status_module",
+        "@pybind11_abseil//pybind11_abseil:absl_casters",
+        "@pybind11_abseil//pybind11_abseil:status_casters",
         "@pybind11_protobuf//pybind11_protobuf:native_proto_caster",
     ],
 )
@@ -21,14 +24,13 @@ py_test(
     deps = [
       ":pyfoo",
       requirement("absl-py"),
-      "//bp11/foo:c_py_pb2",
-      "@org_pybind11_abseil//pybind11_abseil:status",
+        "//bp11/foo:c_py_pb2",
+        "@pybind11_abseil//pybind11_abseil:status",
     ],
     imports = [
       "../../../../org_pybind11_abseil",
     ],
     python_version = "PY3",
-    srcs_version = "PY3",
     tags = ["unit"],
 )
 
@@ -38,7 +40,7 @@ py_test(
     srcs = ["status_test.py"],
     deps = [
       requirement("absl-py"),
-      "@org_pybind11_abseil//pybind11_abseil:status",
+        "@pybind11_abseil//pybind11_abseil:status",
     ],
     imports = [
       "../../../../org_pybind11_abseil",
