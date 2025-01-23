@@ -8,14 +8,29 @@ jobs:
   native:
     strategy:
       matrix:
+        bazel: [
+          {compilation_mode: opt},
+          {compilation_mode: dbg},
+        ]
+        cpp: [
+          #{version: 14, flags: "-std=c++14"},
+          {version: 17, flags: "-std=c++17"},
+          #{version: 20, flags: "-std=c++20"},
+        ]
         python: [
-          {version: '3.9'},
+          #{version: '3.9'},
           #{version: '3.10'},
-          #{version: '3.11'},
+          {version: '3.11'},
           {version: '3.12'},
         ]
+        exclude:
+          # only test `-c dbg` build with C++17
+          - cpp: {version: 14}
+            bazel: {compilation_mode: dbg}
+          - cpp: {version: 20}
+            bazel: {compilation_mode: dbg}
       fail-fast: false
-    name: MacOS•Bazel•Py${{ matrix.python.version }}
+    name: MacOS•Bazel(${{ matrix.bazel.compilation_mode }},C++${{ matrix.cpp.version }})•Py${{ matrix.python.version }}
     runs-on: macos-13 # last macos intel based runner
     steps:
       - uses: actions/checkout@v4
@@ -34,21 +49,26 @@ jobs:
           python -m platform
       - name: Check Bazel
         run: bazel version
+      - name: Change Python in MODULE.bazel
+        run: |
+          sed -i '' -e 's/\(DEFAULT_PYTHON =\) "3.[0-9]*"/\1 "${{ matrix.python.version }}"/g' MODULE.bazel
+          cat MODULE.bazel
       - name: Build
         run: >
           bazel build
-          -c opt
+          -c ${{ matrix.bazel.compilation_mode }}
+          --cxxopt=${{ matrix.cpp.flags }} --host_cxxopt=${{ matrix.cpp.flags }}
           --subcommands=pretty_print
           --enable_bzlmod
           //...
       - name: Test
         run: >
           bazel test
-          -c opt
-          --test_output=all
+          -c ${{ matrix.bazel.compilation_mode }}
+          --cxxopt=${{ matrix.cpp.flags }} --host_cxxopt=${{ matrix.cpp.flags }}
           --subcommands=pretty_print
           --enable_bzlmod
-          //... -- -//:requirements_test
+          //...
 
   amd64_macos_bazel:
     runs-on: ubuntu-latest
