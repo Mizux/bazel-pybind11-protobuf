@@ -30,7 +30,7 @@ setup(
     packages=find_packages(),
     python_requires=">= 3.8",
     install_requires=[
-      'protobuf >= 5.27.2',
+      'protobuf >= 5.29.2',
     ],
     package_data={
         "@PYTHON_PROJECT@":[$<$<NOT:$<PLATFORM_ID:Windows>>:".libs/*">],

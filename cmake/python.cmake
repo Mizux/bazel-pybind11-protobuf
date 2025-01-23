@@ -154,6 +154,12 @@ file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "__version__ = \"
 file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/foo/__init__.py CONTENT "")
 file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/foo/python/__init__.py CONTENT "")
 
+file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/../pybind11_abseil/__init__.py CONTENT "")
+
+# Adds py.typed to make typed packages.
+file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/foo/py.typed CONTENT "")
+file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/foo/python/py.typed CONTENT "")
+
 # setup.py.in contains cmake variable e.g. @PYTHON_PROJECT@ and
 # generator expression e.g. $<TARGET_FILE_NAME:foo_pybind11>
 configure_file(
