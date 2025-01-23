@@ -8,7 +8,7 @@ RUN apk add --no-cache git build-base linux-headers cmake
 
 # Install Python
 RUN apk add --no-cache \
- openssl python3-dev py3-pip py3-wheel \
+ python3-dev py3-pip py3-wheel \
  py3-virtualenv \
  py3-numpy py3-pandas
 RUN python3 -m pip install --break-system-package \
@@ -26,7 +26,7 @@ RUN cmake --build build --target all -v
 RUN cmake --build build --target install -v
 
 FROM build AS test
-RUN cmake --build build --target test -v
+RUN CTEST_OUTPUT_ON_FAILURE=1 cmake --build build --target test -v
 
 # Test install rules
 FROM env AS install_env
@@ -41,7 +41,7 @@ WORKDIR /home/samples
 COPY cmake/samples .
 
 FROM install_devel AS install_build
-RUN python3 sample.py
+RUN python3 -m compileall .
 
 FROM install_build AS install_test
 RUN python3 sample.py
