@@ -15,28 +15,25 @@ jobs:
           {version: '3.12'},
         ]
       fail-fast: false
-    name: Linux • Bazel • Python-${{ matrix.python.version }}
+    name: Linux•Bazel•Py${{ matrix.python.version }}
     runs-on: ubuntu-latest
-    env:
-      CC:  gcc-12
-      CXX: g++-12
     steps:
       - uses: actions/checkout@v4
       - name: Check Java
         run: java -version
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python.version }}
       - name: Check Python
-        run: python --version
-      - name: Install Bazel
         run: |
-          curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
-          sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
-          echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
-          sudo apt-get update
-          sudo apt-get install bazel
+          python --version
+          python -m platform
+      - uses: bazel-contrib/setup-bazel@0.8.4
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
       - name: Check Bazel
         run: bazel version
       - name: Build
@@ -44,11 +41,19 @@ jobs:
           bazel build
           -c opt
           --subcommands=pretty_print
-          ...
+          --enable_bzlmod
+          //...
       - name: Test
         run: >
           bazel test
           -c opt
+          --subcommands=pretty_print
+          --enable_bzlmod
           --test_output=all
-          ...
-          -- -//:requirements_test
+          //... -- -//:requirements_test
+
+  amd64_linux_bazel:
+    runs-on: ubuntu-latest
+    needs: native
+    steps:
+      - uses: actions/checkout@v4
