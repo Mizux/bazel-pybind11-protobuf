@@ -21,7 +21,7 @@ git_repository(
 
 git_repository(
     name = "rules_cc",
-    tag = "0.0.9",
+    tag = "0.1.1",
     remote = "https://github.com/bazelbuild/rules_cc.git",
 )
 
