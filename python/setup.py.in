@@ -1,6 +1,7 @@
 from setuptools import find_packages, setup
 from setuptools.dist import Distribution
 
+
 class BinaryDistribution(Distribution):
     def is_pure(self):
         return False
@@ -8,44 +9,54 @@ class BinaryDistribution(Distribution):
     def has_ext_modules(self):
         return True
 
+
 from setuptools.command.install import install
+
+
 class InstallPlatlib(install):
     def finalize_options(self):
         install.finalize_options(self)
         self.install_lib = self.install_platlib
 
+
 setup(
-  name='@PYTHON_PROJECT@',
-  version='@PROJECT_VERSION@',
-  url='https://github.com/Mizux/bazel-pybind11-protobuf',
-  python_requires='>= 3.8',
-  packages=find_packages(),
-  install_requires=[
-    'protobuf >= 5.27.2',
-  ],
-  package_data={
-  '@PYTHON_PROJECT@':[$<$<NOT:$<PLATFORM_ID:Windows>>:'.libs/*'>],
-  '@PYTHON_PROJECT@.foo':['*.pyi'],
-  '@PYTHON_PROJECT@.foo.python':['$<TARGET_FILE_NAME:foo_pybind11>', '*.pyi'],
-  },
-  include_package_data=True,
-  license='Apache 2.0',
-  author='Mizux',
-  author_email='\"Mizux Seiha\" <mizux.dev@gmail.com>',
-  classifiers=[
-  'Development Status :: 5 - Production/Stable',
-  'Environment :: Console',
-  'Intended Audience :: Developers',
-  'License :: OSI Approved :: Apache Software License',
-  'Operating System :: POSIX :: Linux',
-  'Operating System :: MacOS :: MacOS X',
-  'Operating System :: Microsoft :: Windows',
-  'Programming Language :: Python',
-  'Programming Language :: Python :: 3',
-  'Programming Language :: C++',
-  'Topic :: Scientific/Engineering',
-  'Topic :: Software Development :: Libraries :: Python Modules'
-  ],
-  distclass=BinaryDistribution,
-  cmdclass={'install': InstallPlatlib},
+    name="@PYTHON_PROJECT@",
+    version="@PROJECT_VERSION@",
+    author="Mizux",
+    author_email='"Mizux Seiha" <mizux.dev@gmail.com>',
+    url="https://github.com/Mizux/bazel-pybind11-protobuf",
+    distclass=BinaryDistribution,
+    cmdclass={"install": InstallPlatlib},
+    packages=find_packages(),
+    python_requires=">= 3.8",
+    install_requires=[
+        "protobuf >= 5.27.2,<5.28",
+    ],
+    package_data={
+        "@PYTHON_PROJECT@": [$<$<NOT:$<PLATFORM_ID:Windows>>:".libs/*">],
+        "@PYTHON_PROJECT@.foo": ["*.pyi"],
+        "@PYTHON_PROJECT@.foo.python": ["$<TARGET_FILE_NAME:foo_pybind11>", "*.pyi"],
+        "pybind11_abseil": ["$<TARGET_FILE_NAME:status_py_extension_stub>", "*.pyi"],
+    },
+    include_package_data=True,
+    license="Apache 2.0",
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Console",
+        "Intended Audience :: Developers",
+        "License :: OSI Approved :: Apache Software License",
+        "Operating System :: POSIX :: Linux",
+        "Operating System :: MacOS :: MacOS X",
+        "Operating System :: Microsoft :: Windows",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: C++",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ],
 )
