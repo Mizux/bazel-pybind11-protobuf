@@ -6,14 +6,18 @@ module(
 # Only direct dependencies need to be listed below.
 # Please keep the versions in sync with the versions in the WORKSPACE file.
 # see https://registry.bazel.build/
-bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "abseil-cpp", version = "20240722.0.bcr.2", repo_name = "com_google_absl")
-bazel_dep(name = "abseil-py", version = "2.1.0", repo_name = "com_google_absl_py")
-bazel_dep(name = "platforms", version = "0.0.10")
-bazel_dep(name = "rules_cc", version = "0.0.16")
-bazel_dep(name = "rules_python", version = "0.40.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.1")
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_cc", version = "0.1.4")
+bazel_dep(name = "rules_proto", version = "7.1.0")
+bazel_dep(name = "rules_python", version = "1.5.1")
+bazel_dep(name = "abseil-cpp", version = "20250512.0")
+bazel_dep(name = "protobuf", version = "31.1")
 bazel_dep(name = "pybind11_bazel", version = "2.13.6")
 bazel_dep(name = "pybind11_abseil", version = "202402.0")
+bazel_dep(name = "pybind11_protobuf", version = "0.0.0-20240524-1d7a729")
+bazel_dep(name = "abseil-py", version = "2.1.0")
+
 git_override(
     module_name = "pybind11_abseil",
     commit = "70f8b693b3b70573ca785ef62d9f48054f45d786",
@@ -22,12 +26,16 @@ git_override(
     remote = "https://github.com/pybind/pybind11_abseil.git",
 )
 
-bazel_dep(name = "rules_proto", version = "7.1.0")
-bazel_dep(name = "protobuf", version = "29.2", repo_name = "com_google_protobuf")
-bazel_dep(name = "pybind11_protobuf", version = "0.0.0-20240524-1d7a729")
+git_override(
+    module_name = "pybind11_protobuf",
+    commit = "f02a2b7653bc50eb5119d125842a3870db95d251",
+    #patch_strip = 1,
+    #patches = ["//patches:pybind11_protobuf.patch"],
+    remote = "https://github.com/pybind/pybind11_protobuf.git",
+)
 
 #### DEV ONLY DEPENDENCIES BELOW HERE ####
-bazel_dep(name = "googletest", version = "1.15.2")
+bazel_dep(name = "googletest", version = "1.17.0")
 
 SUPPORTED_PYTHON_VERSIONS = [
     "3.12",

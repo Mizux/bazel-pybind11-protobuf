@@ -1,4 +1,4 @@
-workspace(name = "org_mizux_bazelpybind11protobuf")
+workspace(name = "mizux_bpp11_protobuf")
 
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
 
@@ -13,37 +13,69 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_r
 # Needed for Abseil.
 git_repository(
     name = "bazel_skylib",
-    commit = "27d429d8d036af3d010be837cc5924de1ca8d163",
-    #tag = "1.7.1",
+    #commit = "27d429d8d036af3d010be837cc5924de1ca8d163",
+    tag = "1.8.1",
     remote = "https://github.com/bazelbuild/bazel-skylib.git",
 )
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 bazel_skylib_workspace()
 
+# Needed by rules_java
+git_repository(
+    name = "bazel_features",
+    commit = "3f23ff44ff85416d96566bee8e407694cdb6f1f8",
+    #tag = "v1.32.0",
+    remote = "https://github.com/bazel-contrib/bazel_features.git",
+)
+load("@bazel_features//:deps.bzl", "bazel_features_deps")
+bazel_features_deps()
+
 ## Bazel rules...
 git_repository(
     name = "platforms",
-    commit = "05ec3a3df23fde62471f8288e344cc021dd87bab",
-    #tag = "0.0.10",
+    #commit = "05ec3a3df23fde62471f8288e344cc021dd87bab",
+    tag = "1.0.0",
     remote = "https://github.com/bazelbuild/platforms.git",
 )
 
 git_repository(
     name = "rules_cc",
-    tag = "0.1.1",
+    tag = "0.1.4",
     remote = "https://github.com/bazelbuild/rules_cc.git",
 )
 
 git_repository(
+    name = "rules_java",
+    #commit = "34d7e1bd22b31594c5de10c2d87c3dc6ab8efa74",
+    #tag = "8.9.0",
+    tag = "8.13.0",
+    remote = "https://github.com/bazelbuild/rules_java.git",
+)
+
+load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
+rules_java_dependencies()
+
+
+load("@bazel_features//:deps.bzl", "bazel_features_deps")
+bazel_features_deps()
+
+git_repository(
     name = "rules_proto",
-    tag = "5.3.0-21.7",
+    tag = "7.1.0",
     remote = "https://github.com/bazelbuild/rules_proto.git",
 )
 
+load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
+rules_proto_dependencies()
+
+load("@rules_proto//proto:toolchains.bzl", "rules_proto_toolchains")
+rules_proto_toolchains()
+
 git_repository(
     name = "rules_python",
-    commit = "1944874f6ba507f70d8c5e70df84622e0c783254",
+    #commit = "1944874f6ba507f70d8c5e70df84622e0c783254",
     #tag = "0.40.0",
+    tag = "1.5.1",
     remote = "https://github.com/bazelbuild/rules_python.git",
 )
 
@@ -51,83 +83,67 @@ git_repository(
 ## ZLIB
 new_git_repository(
     name = "zlib",
-    build_file = "@com_google_protobuf//:third_party/zlib.BUILD",
-    tag = "v1.3.1",
+    build_file = "@protobuf//:third_party/zlib.BUILD",
+    commit = "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf",
+    #tag = "v1.3.1",
     remote = "https://github.com/madler/zlib.git",
 )
 
 ## Abseil-cpp
 git_repository(
-    name = "com_google_absl",
-    commit = "4447c7562e3bc702ade25105912dce503f0c4010",
+    name = "abseil-cpp",
+    #commit = "4447c7562e3bc702ade25105912dce503f0c4010",
     #tag = "20240722.0",
+    commit = "bc257a88f7c1939f24e0379f14a3589e926c950c",
+    #tag = "20250512.0",
     remote = "https://github.com/abseil/abseil-cpp.git",
 )
 
 ## Re2
 git_repository(
     name = "com_google_re2",
-    tag = "2024-04-01",
+    tag = "2024-07-02",
     remote = "https://github.com/google/re2.git",
-    repo_mapping = {"@abseil-cpp": "@com_google_absl"},
+    #repo_mapping = {"@abseil-cpp": "@com_google_absl"},
 )
 
 ## Protobuf
 # proto_library and cc_proto_library rules implicitly
-# depend on @com_google_protobuf for protoc and proto runtimes.
-# This statement defines the @com_google_protobuf repo.
+# depend on @protobuf for protoc and proto runtimes.
+# This statement defines the @protobuf repo.
 git_repository(
-    name = "com_google_protobuf",
-    patches = ["//patches:protobuf-v29.2.patch"],
-    patch_args = ["-p1"],
-    tag = "v29.2",
+    name = "protobuf",
+    #patches = ["//patches:protobuf-v29.2.patch"],
+    #patch_args = ["-p1"],
+    tag = "v31.1",
     remote = "https://github.com/protocolbuffers/protobuf.git",
 )
+
 # Load common dependencies.
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+load("@protobuf//:protobuf_deps.bzl", "protobuf_deps")
 protobuf_deps()
 
 ## Python
-load("@rules_python//python:repositories.bzl", "py_repositories", "python_register_multi_toolchains")
+load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
 
-load("@rules_python//python/pip_install:repositories.bzl", "pip_install_dependencies")
-pip_install_dependencies()
 
-DEFAULT_PYTHON = "3.11"
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 
-python_register_multi_toolchains(
-    name = "python",
-    default_version = DEFAULT_PYTHON,
-    python_versions = [
-      "3.12",
-      "3.11",
-      "3.10",
-      "3.9",
-    ],
+python_register_toolchains(
+    name = "python_3_11",
+    # Available versions are listed in @rules_python//python:versions.bzl.
+    # We recommend using the same version your team is already standardized on.
+    python_version = "3.11",
 )
 
-load("@python//:pip.bzl", "multi_pip_parse")
+load("@rules_python//python:pip.bzl", "pip_parse")
 
-multi_pip_parse(
+pip_parse(
     name = "pypi",
-    default_version = DEFAULT_PYTHON,
-    python_interpreter_target = {
-        "3.12": "@python_3_12_host//:python",
-        "3.11": "@python_3_11_host//:python",
-        "3.10": "@python_3_10_host//:python",
-        "3.9": "@python_3_9_host//:python",
-    },
-    requirements_lock = {
-        "3.12": "//bazel:requirements_lock_3_12.txt",
-        "3.11": "//bazel:requirements_lock_3_11.txt",
-        "3.10": "//bazel:requirements_lock_3_10.txt",
-        "3.9": "//bazel:requirements_lock_3_9.txt",
-    },
+    python_interpreter_target = "@python_3_11_host//:python",
+    requirements_lock = "//bazel:requirements_lock_3_11.txt",
 )
-
-load("@pypi//:requirements.bzl", "install_deps")
-install_deps()
 
 ## `pybind11_bazel`
 git_repository(
@@ -162,6 +178,7 @@ new_git_repository(
 ## Testing
 git_repository(
     name = "googletest",
-    tag = "v1.15.2",
+    commit = "52eb8108c5bdec04579160ae17225d66034bd723",
+    #tag = "v1.17.0",
     remote = "https://github.com/google/googletest.git",
 )

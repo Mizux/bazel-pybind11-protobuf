@@ -1,5 +1,5 @@
 # Code dependencies
-absl-py==2.1.0
+absl-py==2.3.1
 protobuf==5.29.2
 
 mypy==1.6.1
