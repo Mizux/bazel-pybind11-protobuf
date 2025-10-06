@@ -16,32 +16,13 @@ https://github.com/bazelbuild/bazelisk/releases/download/v1.27.0/bazelisk-linux-
 && chmod +x bazelisk-linux-${TARGETARCH} \
 && mv bazelisk-linux-${TARGETARCH} /usr/local/bin/bazel
 
-# Install Java JDK and Maven
-RUN zypper refresh \
-&& zypper install -y java-17-openjdk-devel maven \
-&& zypper clean -a
-ENV PATH=/usr/share/maven/bin:$PATH
-
-# Install Python
-RUN zypper update -y \
-&& zypper install -y python3 python3-devel python3-pip \
-&& zypper clean -a
-
 FROM env AS devel
 WORKDIR /home/project
 COPY . .
 
 FROM devel AS build
 RUN bazel version
-RUN bazel build \
- -c opt \
- --subcommands=pretty_print \
- --enable_bzlmod \
- ...
+RUN bazel build --config=ci //...
 
 FROM build AS test
-RUN bazel test \
- -c opt \
- --test_output=errors \
- --enable_bzlmod \
- ...
+RUN bazel test --config=ci //...

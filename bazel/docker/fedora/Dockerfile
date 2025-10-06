@@ -19,32 +19,13 @@ https://github.com/bazelbuild/bazelisk/releases/download/v1.27.0/bazelisk-linux-
 && chmod +x bazelisk-linux-${TARGETARCH} \
 && mv bazelisk-linux-${TARGETARCH} /usr/local/bin/bazel
 
-# Install Java
-RUN dnf -y update \
-&& dnf -y install java-21-openjdk java-21-openjdk-devel maven \
-&& dnf clean all
-ENV JAVA_HOME=/usr/lib/jvm/java-openjdk
-
-# Install Python
-RUN dnf -y update \
-&& dnf -y install python3 python3-devel python3-pip \
-&& dnf clean all
-
 FROM env AS devel
 WORKDIR /home/project
 COPY . .
 
 FROM devel AS build
 RUN bazel version
-RUN bazel build \
- -c opt \
- --subcommands=pretty_print \
- --enable_bzlmod \
- ...
+RUN bazel build --config=ci //...
 
 FROM build AS test
-RUN bazel test \
- -c opt \
- --test_output=errors \
- --enable_bzlmod \
- ...
+RUN bazel test --config=ci //...
