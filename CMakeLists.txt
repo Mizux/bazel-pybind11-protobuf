@@ -11,7 +11,7 @@ message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 #message(STATUS "minor: ${PROJECT_VERSION_MINOR}")
 #message(STATUS "patch: ${PROJECT_VERSION_PATCH}")
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -76,6 +76,7 @@ include(ccache)
 # Build deps
 option(BUILD_ZLIB "Build the ZLIB dependency Library" ON)
 message(STATUS "Build ZLIB: ${BUILD_ZLIB}")
+
 option(BUILD_absl "Build the abseil-cpp dependency Library" ON)
 message(STATUS "Build absl: ${BUILD_absl}")
 

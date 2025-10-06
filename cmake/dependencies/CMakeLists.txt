@@ -12,13 +12,13 @@ set(CMAKE_Fortran_COMPILER OFF)
 if(BUILD_ZLIB)
   message(CHECK_START "Fetching ZLIB")
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
-  set(ZLIB_BUILD_EXAMPLES OFF)
   FetchContent_Declare(
     ZLIB
     GIT_REPOSITORY "https://github.com/madler/ZLIB.git"
     GIT_TAG "v1.3.1"
     PATCH_COMMAND git apply --ignore-whitespace
     "${CMAKE_CURRENT_LIST_DIR}/../../patches/ZLIB-v1.3.1.patch")
+  set(ZLIB_BUILD_EXAMPLES OFF)
   FetchContent_MakeAvailable(ZLIB)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
@@ -30,18 +30,26 @@ endif()
 if(BUILD_absl)
   message(CHECK_START "Fetching Abseil-cpp")
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
-  set(ABSL_ENABLE_INSTALL ON)
-  set(ABSL_USE_SYSTEM_INCLUDES ON)
-  set(ABSL_PROPAGATE_CXX_STD ON)
-  set(ABSL_BUILD_TESTING OFF)
   FetchContent_Declare(
     absl
     GIT_REPOSITORY "https://github.com/abseil/abseil-cpp.git"
     GIT_TAG "20250814.0"
     GIT_SHALLOW TRUE
+    UPDATE_COMMAND git reset --hard
     PATCH_COMMAND git apply --ignore-whitespace
     "${CMAKE_CURRENT_LIST_DIR}/../../patches/abseil-cpp-20250814.0.patch"
+    OVERRIDE_FIND_PACKAGE
   )
+  set(ABSL_USE_SYSTEM_INCLUDES ON)
+  # We want Abseil to declare what C++ standard it was compiled with.
+  set(ABSL_PROPAGATE_CXX_STD ON)
+  # We want Abseil to keep the INSTALL rules enabled, even though it is a
+  # subproject. Otherwise the install rules in this project break.
+  set(ABSL_ENABLE_INSTALL ON)
+  set(ABSL_BUILD_TESTING OFF)
+  set(ABSL_BUILD_TEST_HELPERS ON)
+  set(ABSL_USE_EXTERNAL_GOOGLETEST ON)
+  set(ABSL_FIND_GOOGLETEST OFF)
   FetchContent_MakeAvailable(absl)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
@@ -53,20 +61,20 @@ endif()
 if(BUILD_Protobuf)
   message(CHECK_START "Fetching Protobuf")
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
+  FetchContent_Declare(
+    Protobuf
+    GIT_REPOSITORY "https://github.com/protocolbuffers/protobuf.git"
+    GIT_TAG "v32.0"
+    GIT_SHALLOW TRUE
+    GIT_SUBMODULES ""
+    PATCH_COMMAND git apply --ignore-whitespace
+    "${CMAKE_CURRENT_LIST_DIR}/../../patches/protobuf-v32.0.patch"
+  )
   set(protobuf_BUILD_TESTS OFF)
   set(protobuf_BUILD_SHARED_LIBS ON)
   set(protobuf_BUILD_EXPORT OFF)
   set(protobuf_MSVC_STATIC_RUNTIME OFF)
   #set(protobuf_BUILD_LIBUPB ON)
-  FetchContent_Declare(
-    Protobuf
-    GIT_REPOSITORY "https://github.com/protocolbuffers/protobuf.git"
-    GIT_TAG "v29.2"
-    GIT_SHALLOW TRUE
-    GIT_SUBMODULES ""
-    PATCH_COMMAND git apply --ignore-whitespace
-    "${CMAKE_CURRENT_LIST_DIR}/../../patches/protobuf-v29.2.patch"
-  )
   FetchContent_MakeAvailable(Protobuf)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
@@ -78,15 +86,16 @@ endif()
 if(BUILD_re2)
   message(CHECK_START "Fetching re2")
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
-  set(RE2_BUILD_TESTING OFF)
   FetchContent_Declare(
     re2
     GIT_REPOSITORY "https://github.com/google/re2.git"
     GIT_TAG "2024-07-02"
     GIT_SHALLOW TRUE
+    UPDATE_COMMAND git reset --hard
     PATCH_COMMAND git apply --ignore-whitespace
     "${CMAKE_CURRENT_LIST_DIR}/../../patches/re2-2024-07-02.patch"
   )
+  set(RE2_BUILD_TESTING OFF)
   FetchContent_MakeAvailable(re2)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
@@ -97,25 +106,30 @@ endif()
 # ##############################################################################
 # Find Python 3
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
+message(STATUS "Python: ${Python3_EXECUTABLE}")
 
 if(BUILD_pybind11)
   message(CHECK_START "Fetching pybind11")
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
-  set(PYBIND11_FINDPYTHON ON)
-  set(PYBIND11_INSTALL ON)
-  set(PYBIND11_TEST OFF)
   FetchContent_Declare(
     pybind11
     GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
-    GIT_TAG "v2.13.1"
+    GIT_TAG "v2.13.6"
     GIT_SHALLOW TRUE
-    PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11.patch"
+    #PATCH_COMMAND git apply --ignore-whitespace
+    #"${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11-v2.13.6.patch"
   )
+  set(PYBIND11_FINDPYTHON ON)
+  set(PYBIND11_INSTALL ON)
+  set(PYBIND11_TEST OFF)
   FetchContent_MakeAvailable(pybind11)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
 endif()
 
+# ##############################################################################
+# Pybind11 Abseil
+# ##############################################################################
 if(BUILD_pybind11_abseil)
   message(CHECK_START "Fetching pybind11_abseil")
   list(APPEND CMAKE_MESSAGE_INDENT "  ")
