@@ -10,6 +10,12 @@ target_include_directories(foo
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
     $<INSTALL_INTERFACE:include>)
 target_compile_features(foo PUBLIC cxx_std_17)
+if(MSVC AND BUILD_SHARED_LIBS)
+  target_compile_definitions(foo INTERFACE "PROTO_DLL=__declspec(dllimport)")
+  target_compile_definitions(foo PRIVATE "PROTO_DLL=__declspec(dllexport)")
+ else()
+  target_compile_definitions(foo PUBLIC "PROTO_DLL=")
+endif()
 if(APPLE)
   set_target_properties(foo PROPERTIES
     INSTALL_RPATH "@loader_path")
