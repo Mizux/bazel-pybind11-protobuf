@@ -89,6 +89,55 @@ function(search_python_internal_module)
   endif()
 endfunction()
 
+##################
+##  PROTO FILE  ##
+##################
+# Generate Protobuf py sources with mypy support
+search_python_module(
+  NAME mypy_protobuf
+  PACKAGE mypy-protobuf
+  NO_VERSION)
+set(PROTO_PYS)
+set(PROTO_MYPYS)
+file(GLOB_RECURSE proto_py_files RELATIVE ${PROJECT_SOURCE_DIR}
+  "bp11/foo/*.proto")
+## Get Protobuf include dir
+get_target_property(protobuf_dirs protobuf::libprotobuf INTERFACE_INCLUDE_DIRECTORIES)
+foreach(dir IN LISTS protobuf_dirs)
+  if (NOT "${dir}" MATCHES "INSTALL_INTERFACE|-NOTFOUND")
+    message(STATUS "protoc(cc) Adding proto path: ${dir}")
+    list(APPEND PROTO_DIRS "--proto_path=${dir}")
+  endif()
+endforeach()
+foreach(PROTO_FILE IN LISTS proto_py_files)
+  message(STATUS "protoc(py) .proto: ${PROTO_FILE}")
+  get_filename_component(PROTO_DIR ${PROTO_FILE} DIRECTORY)
+  get_filename_component(PROTO_NAME ${PROTO_FILE} NAME_WE)
+  set(PROTO_PY ${PROJECT_BINARY_DIR}/python/${PROTO_DIR}/${PROTO_NAME}_pb2.py)
+  set(PROTO_MYPY ${PROJECT_BINARY_DIR}/python/${PROTO_DIR}/${PROTO_NAME}_pb2.pyi)
+  message(STATUS "protoc(py) py: ${PROTO_PY}")
+  message(STATUS "protoc(py) mypy: ${PROTO_MYPY}")
+  add_custom_command(
+    OUTPUT ${PROTO_PY} ${PROTO_MYPY}
+    COMMAND ${PROTOC_PRG}
+    "--proto_path=${PROJECT_SOURCE_DIR}"
+    ${PROTO_DIRS}
+    "--python_out=${PROJECT_BINARY_DIR}/python"
+    "--mypy_out=${PROJECT_BINARY_DIR}/python"
+    ${PROTO_FILE}
+    DEPENDS ${PROTO_FILE} ${PROTOC_PRG}
+    COMMENT "Generate Python 3 protocol buffer for ${PROTO_FILE}"
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    VERBATIM)
+  list(APPEND PROTO_PYS ${PROTO_PY})
+  list(APPEND PROTO_MYPYS ${PROTO_MYPY})
+endforeach()
+add_custom_target(Py${PROJECT_NAME}_proto
+  DEPENDS
+    ${PROTO_PYS}
+    ${PROTO_MYPYS}
+    ${PROJECT_NAMESPACE}::foo)
+
 ###################
 ##  Python Test  ##
 ###################
@@ -154,55 +203,6 @@ message(STATUS "Python project: ${PYTHON_PROJECT}")
 set(PYTHON_PROJECT_DIR ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT})
 message(STATUS "Python project build path: ${PYTHON_PROJECT_DIR}")
 
-##################
-##  PROTO FILE  ##
-##################
-# Generate Protobuf py sources with mypy support
-search_python_module(
-  NAME mypy_protobuf
-  PACKAGE mypy-protobuf
-  NO_VERSION)
-set(PROTO_PYS)
-set(PROTO_MYPYS)
-file(GLOB_RECURSE proto_py_files RELATIVE ${PROJECT_SOURCE_DIR}
-  "bp11/foo/*.proto")
-## Get Protobuf include dir
-get_target_property(protobuf_dirs protobuf::libprotobuf INTERFACE_INCLUDE_DIRECTORIES)
-foreach(dir IN LISTS protobuf_dirs)
-  if (NOT "${dir}" MATCHES "INSTALL_INTERFACE|-NOTFOUND")
-    message(STATUS "protoc(cc) Adding proto path: ${dir}")
-    list(APPEND PROTO_DIRS "--proto_path=${dir}")
-  endif()
-endforeach()
-foreach(PROTO_FILE IN LISTS proto_py_files)
-  message(STATUS "protoc(py) .proto: ${PROTO_FILE}")
-  get_filename_component(PROTO_DIR ${PROTO_FILE} DIRECTORY)
-  get_filename_component(PROTO_NAME ${PROTO_FILE} NAME_WE)
-  set(PROTO_PY ${PROJECT_BINARY_DIR}/python/${PROTO_DIR}/${PROTO_NAME}_pb2.py)
-  set(PROTO_MYPY ${PROJECT_BINARY_DIR}/python/${PROTO_DIR}/${PROTO_NAME}_pb2.pyi)
-  message(STATUS "protoc(py) py: ${PROTO_PY}")
-  message(STATUS "protoc(py) mypy: ${PROTO_MYPY}")
-  add_custom_command(
-    OUTPUT ${PROTO_PY} ${PROTO_MYPY}
-    COMMAND ${PROTOC_PRG}
-    "--proto_path=${PROJECT_SOURCE_DIR}"
-    ${PROTO_DIRS}
-    "--python_out=${PROJECT_BINARY_DIR}/python"
-    "--mypy_out=${PROJECT_BINARY_DIR}/python"
-    ${PROTO_FILE}
-    DEPENDS ${PROTO_FILE} ${PROTOC_PRG}
-    COMMENT "Generate Python 3 protocol buffer for ${PROTO_FILE}"
-    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
-    VERBATIM)
-  list(APPEND PROTO_PYS ${PROTO_PY})
-  list(APPEND PROTO_MYPYS ${PROTO_MYPY})
-endforeach()
-add_custom_target(Py${PROJECT_NAME}_proto
-  DEPENDS
-    ${PROTO_PYS}
-    ${PROTO_MYPYS}
-    ${PROJECT_NAMESPACE}::foo)
-
 #######################
 ## Python Packaging  ##
 #######################
@@ -247,6 +247,9 @@ set(need_windows_zlib_lib "$<AND:${is_windows},$<BOOL:${BUILD_ZLIB}>>")
 
 set(need_unix_absl_lib "$<AND:${is_not_windows},$<BOOL:${BUILD_absl}>>")
 set(need_windows_absl_lib "$<AND:${is_windows},$<BOOL:${BUILD_absl}>>")
+
+set(need_unix_protobuf_lib "$<AND:${is_not_windows},$<BOOL:${BUILD_Protobuf}>>")
+set(need_windows_protobuf_lib "$<AND:${is_windows},$<BOOL:${BUILD_Protobuf}>>")
 
 set(is_foo_shared "$<STREQUAL:$<TARGET_PROPERTY:foo,TYPE>,SHARED_LIBRARY>")
 set(need_unix_foo_lib "$<AND:${is_not_windows},${is_foo_shared}>")
@@ -348,6 +351,14 @@ add_custom_command(
     $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::utf8_for_code_point>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::vlog_config_internal>>
     $<${need_windows_absl_lib}:$<TARGET_FILE:absl::abseil_dll>>
+    ${PYTHON_PROJECT}/.libs
+
+  COMMAND ${CMAKE_COMMAND} -E
+    $<IF:$<BOOL:${BUILD_Protobuf}>,copy,true>
+    $<${need_unix_protobuf_lib}:$<TARGET_SONAME_FILE:protobuf::libprotobuf>>
+    $<${need_unix_protobuf_lib}:$<TARGET_SONAME_FILE:utf8_validity>>
+    $<${need_windows_protobuf_lib}:$<TARGET_FILE:protobuf::libprotobuf>>
+    $<${need_windows_protobuf_lib}:$<TARGET_FILE:utf8_validity>>
     ${PYTHON_PROJECT}/.libs
 
   COMMAND ${CMAKE_COMMAND} -E

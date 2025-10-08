@@ -1,6 +1,7 @@
 add_library(foo)
 get_cpp_proto(PROTO_HDRS PROTO_SRCS)
-target_sources(foo PRIVATE
+target_sources(foo
+  PRIVATE
     foo.hpp foo.cpp
     ${PROTO_HDRS} ${PROTO_SRCS})
 target_include_directories(foo
@@ -9,6 +10,13 @@ target_include_directories(foo
     $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
     $<INSTALL_INTERFACE:include>)
 target_compile_features(foo PUBLIC cxx_std_17)
+if(APPLE)
+  set_target_properties(foo PROPERTIES
+    INSTALL_RPATH "@loader_path")
+elseif(UNIX)
+  set_target_properties(foo PROPERTIES
+    INSTALL_RPATH "$ORIGIN")
+endif()
 set_target_properties(foo PROPERTIES
   VERSION ${PROJECT_VERSION}
   PUBLIC_HEADER "foo.hpp;${PROTO_HDRS}")
