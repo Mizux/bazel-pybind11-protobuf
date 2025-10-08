@@ -1,5 +1,6 @@
 workspace(name = "bazel-pybind11-protobuf")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_repository")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 ################################################################################
 #
@@ -67,35 +68,40 @@ rules_proto_toolchains()
 
 git_repository(
     name = "rules_python",
-    tag = "1.5.1",
+    commit = "38f2679fcc6c23a72e4c6309b7fdecb4eafcccf0",
+    #tag = "1.6.3",
     remote = "https://github.com/bazelbuild/rules_python.git",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
 
-load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 DEFAULT_PYTHON = "3.12"
+load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 python_register_toolchains(
     name = "python",
     # Available versions are listed in @rules_python//python:versions.bzl.
     # We recommend using the same version your team is already standardized on.
     python_version = DEFAULT_PYTHON,
 )
-
 load("@rules_python//python:pip.bzl", "pip_parse")
 pip_parse(
     name = "pypi",
     python_interpreter_target = "@python_host//:python",
     requirements_lock = "//bazel:requirements_lock_3_12.txt",
 )
+# Load the starlark macro, which will define your dependencies.
+load("@pypi//:requirements.bzl", "install_deps")
+# Call it to define repos for your requirements.
+install_deps()
 
 ## `pybind11_bazel`
 git_repository(
     name = "pybind11_bazel",
-    tag = "v2.13.6", # 2024/04/08
-    patches = ["//patches:pybind11_bazel.patch"],
-    patch_args = ["-p1"],
+    commit = "2b6082a4d9d163a52299718113fa41e4b7978db5",
+    #tag = "v2.13.6", # 2024/04/08
+    #patches = ["//patches:pybind11_bazel.patch"],
+    #patch_args = ["-p1"],
     remote = "https://github.com/pybind/pybind11_bazel.git",
 )
 
@@ -104,16 +110,19 @@ git_repository(
 new_git_repository(
     name = "pybind11",
     build_file = "@pybind11_bazel//:pybind11-BUILD.bazel",
-    tag = "v2.13.6",
+    commit = "a2e59f0e7065404b44dfe92a28aca47ba1378dc4",
+    #tag = "v2.13.6",
     remote = "https://github.com/pybind/pybind11.git",
 )
 
 new_git_repository(
     name = "pybind11_abseil",
-    tag = "v202402.0",
+    commit = "70f8b693b3b70573ca785ef62d9f48054f45d786",
+    #tag = "v202402.0",
     patches = ["//patches:pybind11_abseil.patch"],
     patch_args = ["-p1"],
     remote = "https://github.com/pybind/pybind11_abseil.git",
+    repo_mapping = {"@com_google_absl": "@abseil-cpp"},
 )
 
 new_git_repository(
@@ -126,7 +135,7 @@ new_git_repository(
 ## ZLIB
 new_git_repository(
     name = "zlib",
-    build_file = "@protobuf//:third_party/zlib.BUILD",
+    build_file = "@com_google_protobuf//:third_party/zlib.BUILD",
     commit = "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf",
     #tag = "v1.3.1",
     remote = "https://github.com/madler/zlib.git",
