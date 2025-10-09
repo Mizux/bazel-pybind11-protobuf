@@ -36,9 +36,15 @@ jobs:
       - name: Check Bazel
         run: bazel version
       - name: Build
-        run: bazel build --config=ci --@rules_python//python/config_settings:python_version=${{matrix.python.version}} //...
+        run: >
+          bazel build --config=ci
+          --@rules_python//python/config_settings:python_version=${{matrix.python.version}}
+          //...
       - name: Test
-        run: bazel test --config=ci --@rules_python//python/config_settings:python_version=${{matrix.python.version}} //...
+        run: >
+          bazel test --config=ci
+          --@rules_python//python/config_settings:python_version=${{matrix.python.version}}
+          //...
 
   amd64_windows_bazel:
     runs-on: ubuntu-latest

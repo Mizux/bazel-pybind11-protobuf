@@ -77,6 +77,7 @@ load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
 
 DEFAULT_PYTHON = "3.12"
+
 load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 python_register_toolchains(
     name = "python",
@@ -90,6 +91,7 @@ pip_parse(
     python_interpreter_target = "@python_host//:python",
     requirements_lock = "//bazel:requirements_lock_3_12.txt",
 )
+
 # Load the starlark macro, which will define your dependencies.
 load("@pypi//:requirements.bzl", "install_deps")
 # Call it to define repos for your requirements.
