@@ -15,6 +15,7 @@ elseif(UNIX)
     INSTALL_RPATH "$ORIGIN:$ORIGIN/../../../${PYTHON_PROJECT}/.libs:$ORIGIN/../../../pybind11_abseil"
     )
 endif()
+# Protobuf bug
 target_include_directories(foo_pybind11 PRIVATE
   ${protobuf_SOURCE_DIR})
 target_link_libraries(foo_pybind11 PRIVATE

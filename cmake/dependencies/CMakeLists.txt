@@ -1,6 +1,3 @@
-# We are using FetchContent OVERRIDE_FIND_PACKAGE introduced in 3.24
-cmake_minimum_required(VERSION 3.24)
-
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
@@ -193,7 +190,7 @@ if(BUILD_googletest)
   )
   set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
   set(GTEST_HAS_ABSL ON)
-  set(INSTALL_GTEST ON)
+  set(INSTALL_GTEST OFF)
   FetchContent_MakeAvailable(googletest)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
