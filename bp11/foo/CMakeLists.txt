@@ -2,7 +2,7 @@ add_library(foo)
 get_cpp_proto(PROTO_HDRS PROTO_SRCS)
 target_sources(foo
   PRIVATE
-    foo.hpp foo.cpp
+    foo.h foo.cc
     ${PROTO_HDRS} ${PROTO_SRCS})
 target_include_directories(foo
   PUBLIC
@@ -25,7 +25,7 @@ elseif(UNIX)
 endif()
 set_target_properties(foo PROPERTIES
   VERSION ${PROJECT_VERSION}
-  PUBLIC_HEADER "foo.hpp;${PROTO_HDRS}")
+  PUBLIC_HEADER "foo.h;${PROTO_HDRS}")
 target_link_libraries(foo PUBLIC
   absl::strings
   absl::status
@@ -34,7 +34,7 @@ target_link_libraries(foo PUBLIC
 )
 add_library(${PROJECT_NAMESPACE}::foo ALIAS foo)
 
-add_cpp_test(${CMAKE_CURRENT_SOURCE_DIR}/foo_test.cpp)
+add_cpp_test(${CMAKE_CURRENT_SOURCE_DIR}/foo_test.cc)
 
 # Install
 install(TARGETS foo
