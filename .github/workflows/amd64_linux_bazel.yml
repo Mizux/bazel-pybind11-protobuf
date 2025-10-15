@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         python: [
-          {version: '3.10'},
+          #{version: '3.10'},
           {version: '3.11'},
           {version: '3.12'},
           #{version: '3.13'},
@@ -58,13 +58,11 @@ jobs:
           bazel build --config=ci
           --noenable_bzlmod --enable_workspace
           //...
-          -- -//bazel/...
       - name: Test
         run: >
           bazel test --config=ci
           --noenable_bzlmod --enable_workspace
           //...
-          -- -//bazel/...
 
   amd64_linux_bazel:
     runs-on: ubuntu-latest
