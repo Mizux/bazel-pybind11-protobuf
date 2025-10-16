@@ -46,9 +46,8 @@ git_repository(
 
 git_repository(
     name = "rules_java",
-    #commit = "34d7e1bd22b31594c5de10c2d87c3dc6ab8efa74",
-    #tag = "8.9.0",
-    tag = "8.13.0",
+    commit = "d1e335a58dcc24ca386042d7d9891d71013650d5",
+    #tag = "8.13.0",
     remote = "https://github.com/bazelbuild/rules_java.git",
 )
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
@@ -59,7 +58,7 @@ git_repository(
     commit = "4904e1ca79182d5a3779ecbd23273285ccd70e5c",
     #tag = "7.1.0",
     remote = "https://github.com/bazelbuild/rules_proto.git",
-    #repo_mapping = {"@protobuf": "@com_google_protobuf"},
+    repo_mapping = {"@com_google_protobuf": "@protobuf"},
 )
 load("@rules_proto//proto:repositories.bzl", "rules_proto_dependencies")
 rules_proto_dependencies()
@@ -137,7 +136,7 @@ new_git_repository(
 ## ZLIB
 new_git_repository(
     name = "zlib",
-    build_file = "@com_google_protobuf//:third_party/zlib.BUILD",
+    build_file = "@protobuf//:third_party/zlib.BUILD",
     commit = "51b7f2abdade71cd9bb0e7a373ef2610ec6f9daf",
     #tag = "v1.3.1",
     remote = "https://github.com/madler/zlib.git",
@@ -164,12 +163,13 @@ git_repository(
 # proto_library and cc_proto_library rules implicitly
 # depend on @com_google_protobuf for protoc and proto runtimes.
 git_repository(
-    name = "com_google_protobuf",
+    name = "protobuf",
     commit = "74211c0dfc2777318ab53c2cd2c317a2ef9012de",
     #tag = "v31.1",
     remote = "https://github.com/protocolbuffers/protobuf.git",
+    repo_mapping = {"@com_google_protobuf": "@protobuf"},
 )
-load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
+load("@protobuf//:protobuf_deps.bzl", "protobuf_deps")
 protobuf_deps()
 
 # Testing
