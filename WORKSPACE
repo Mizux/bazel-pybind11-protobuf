@@ -53,6 +53,8 @@ git_repository(
 load("@rules_java//java:rules_java_deps.bzl", "rules_java_dependencies")
 rules_java_dependencies()
 
+# can't work even with repo_mapping
+# see: https://github.com/bazelbuild/rules_proto/issues/234
 git_repository(
     name = "rules_proto",
     commit = "4904e1ca79182d5a3779ecbd23273285ccd70e5c",
@@ -75,8 +77,8 @@ git_repository(
 load("@rules_python//python:repositories.bzl", "py_repositories")
 py_repositories()
 
-DEFAULT_PYTHON = "3.12"
-
+# warning: Must be identical to the version in .bazelrc
+DEFAULT_PYTHON = "3.13"
 load("@rules_python//python:repositories.bzl", "python_register_toolchains")
 python_register_toolchains(
     name = "python",
@@ -88,7 +90,7 @@ load("@rules_python//python:pip.bzl", "pip_parse")
 pip_parse(
     name = "pypi",
     python_interpreter_target = "@python_host//:python",
-    requirements_lock = "//bazel:requirements_lock_3_12.txt",
+    requirements_lock = "//bazel:requirements.txt",
 )
 
 # Load the starlark macro, which will define your dependencies.
@@ -99,8 +101,8 @@ install_deps()
 ## `pybind11_bazel`
 git_repository(
     name = "pybind11_bazel",
-    commit = "2b6082a4d9d163a52299718113fa41e4b7978db5",
-    #tag = "v2.13.6", # 2024/04/08
+    commit = "9017093dd5338d45bac01b489c93348666926038",
+    #tag = "v3.0.0",
     #patches = ["//patches:pybind11_bazel.patch"],
     #patch_args = ["-p1"],
     remote = "https://github.com/pybind/pybind11_bazel.git",
@@ -111,8 +113,8 @@ git_repository(
 new_git_repository(
     name = "pybind11",
     build_file = "@pybind11_bazel//:pybind11-BUILD.bazel",
-    commit = "a2e59f0e7065404b44dfe92a28aca47ba1378dc4",
-    #tag = "v2.13.6",
+    commit = "ed5057ded698e305210269dafa57574ecf964483",
+    #tag = "v3.0.0",
     remote = "https://github.com/pybind/pybind11.git",
 )
 
@@ -153,10 +155,10 @@ git_repository(
 ## Re2
 git_repository(
     name = "re2",
-    commit = "6dcd83d60f7944926bfd308cc13979fc53dd69ca",
-    #tag = "2024-07-02",
+    commit = "0f6c07eae69151e606acb3d9232750c3442dff23",
+    #tag = "2025-08-12",
     remote = "https://github.com/google/re2.git",
-    #repo_mapping = {"@abseil-cpp": "@com_google_absl"},
+    #repo_mapping = {"@com_google_absl": "@abseil-cpp"},
 )
 
 ## Protobuf
@@ -164,8 +166,8 @@ git_repository(
 # depend on @com_google_protobuf for protoc and proto runtimes.
 git_repository(
     name = "protobuf",
-    commit = "74211c0dfc2777318ab53c2cd2c317a2ef9012de",
-    #tag = "v31.1",
+    #commit = "",
+    tag = "v32.0",
     remote = "https://github.com/protocolbuffers/protobuf.git",
     repo_mapping = {"@com_google_protobuf": "@protobuf"},
 )
@@ -179,4 +181,5 @@ git_repository(
     commit = "52eb8108c5bdec04579160ae17225d66034bd723",
     #tag = "v1.17.0",
     remote = "https://github.com/google/googletest.git",
+    #repo_mapping = {"@com_google_absl": "@abseil-cpp"},
 )
