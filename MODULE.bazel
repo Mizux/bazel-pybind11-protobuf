@@ -46,7 +46,7 @@ SUPPORTED_PYTHON_VERSIONS = [
     "3.9",
 ]
 
-DEFAULT_PYTHON = "3.12"
+DEFAULT_PYTHON = "3.13"
 python = use_extension("@rules_python//python/extensions:python.bzl", "python", dev_dependency = True)
 
 [
@@ -66,7 +66,7 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip", dev_depen
     pip.parse(
         hub_name = "pypi_bp11_proto",
         python_version = version,
-        requirements_lock = "//bazel:requirements_lock_" + version.replace(".", "_") + ".txt",
+        requirements_lock = "//bazel:requirements.txt",
     )
     for version in SUPPORTED_PYTHON_VERSIONS
 ]
