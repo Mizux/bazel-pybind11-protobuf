@@ -36,7 +36,7 @@ setup(
     python_requires='>= 3.9',
     install_requires=[
         'absl-py >= 2.0.0',
-        "protobuf >= 6.32,<6.33",
+        "protobuf >= 6.33,<6.34",
     ],
     package_data={
         '@PYTHON_PROJECT@':['.libs/*'],
