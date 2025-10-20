@@ -1,6 +1,6 @@
 # Code dependencies
 absl-py==2.3.1
-protobuf==6.32.0
+protobuf==6.33.0
 
 mypy==1.18.2
 mypy-protobuf==3.6.0

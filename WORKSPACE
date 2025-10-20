@@ -166,8 +166,8 @@ git_repository(
 # depend on @com_google_protobuf for protoc and proto runtimes.
 git_repository(
     name = "protobuf",
-    commit = "4fbd1111a292d04746c732573025e3251de0bb9c",
-    #tag = "v32.0",
+    commit = "a79f2d2e9fadd75e94f3fe40a0399bf0a5d90551",
+    #tag = "v33.0",
     remote = "https://github.com/protocolbuffers/protobuf.git",
     repo_mapping = {"@com_google_protobuf": "@protobuf"},
 )
