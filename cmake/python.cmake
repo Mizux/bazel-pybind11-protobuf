@@ -284,8 +284,8 @@ add_custom_command(
     $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::decode_rust_punycode>>
     $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::demangle_internal>>
     $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::demangle_rust>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::die_if_null>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::examine_stack>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::die_if_null>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::examine_stack>>
     $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::exponential_biased>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::flags_commandlineflag>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::flags_commandlineflag_internal>>
@@ -306,20 +306,20 @@ add_custom_command(
     $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::leak_check>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_entry>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_flags>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_globals>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_globals>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_initialize>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_check_op>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_conditions>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_check_op>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_conditions>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_fnmatch>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_format>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_globals>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_log_sink_set>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_structured_proto>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_message>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_nullguard>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_proto>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_format>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_globals>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_log_sink_set>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_structured_proto>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_message>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_nullguard>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_internal_proto>>
     $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_severity>>
-    #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_sink>>
+    $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::log_sink>>
     $<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::malloc_internal>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::random_distributions>>
     #$<${need_unix_absl_lib}:$<TARGET_SONAME_FILE:absl::random_internal_entropy_pool>>
