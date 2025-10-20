@@ -47,7 +47,7 @@ SUPPORTED_PYTHON_VERSIONS = [
 ]
 
 DEFAULT_PYTHON = "3.13"
-python = use_extension("@rules_python//python/extensions:python.bzl", "python", dev_dependency = True)
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 
 [
     python.toolchain(
