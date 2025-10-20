@@ -77,8 +77,13 @@ include(ccache)
 # Build deps
 option(BUILD_ZLIB "Build the ZLIB dependency Library" ON)
 message(STATUS "Build ZLIB: ${BUILD_ZLIB}")
+
 option(BUILD_absl "Build the abseil-cpp dependency Library" ON)
 message(STATUS "Build absl: ${BUILD_absl}")
+
+option(BUILD_re2 "Build the RE2 dependency Library" ON)
+message(STATUS "Build re2: ${BUILD_re2}")
+
 option(BUILD_Protobuf "Build the Protobuf dependency Library" ON)
 message(STATUS "Build protobuf: ${BUILD_Protobuf}")
 
@@ -87,13 +92,10 @@ set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)
 
 if(BUILD_TESTING)
-  option(BUILD_re2 "Build the RE2 dependency Library" ON)
   option(BUILD_googletest "Build the googletest dependency Library" ON)
 else()
-  set(BUILD_re2 OFF)
   set(BUILD_googletest OFF)
 endif()
-message(STATUS "Build re2: ${BUILD_re2}")
 message(STATUS "Build googletest: ${BUILD_googletest}")
 
 option(BUILD_pybind11 "Build pybind11 library" ON)

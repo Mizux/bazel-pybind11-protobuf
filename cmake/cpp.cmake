@@ -28,6 +28,9 @@ if(CHECK_TYPE)
   cmake_pop_check_state()
 endif()
 
+##################
+##  PROTO FILE  ##
+##################
 # get_cpp_proto()
 # CMake macro to generate Protobuf cpp sources
 # Parameters:
