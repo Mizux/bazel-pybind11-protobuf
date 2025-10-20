@@ -59,32 +59,6 @@ if(BUILD_absl)
 endif()
 
 # ##############################################################################
-# Protobuf
-# ##############################################################################
-if(BUILD_Protobuf)
-  message(CHECK_START "Fetching Protobuf")
-  list(APPEND CMAKE_MESSAGE_INDENT "  ")
-  FetchContent_Declare(
-    Protobuf
-    GIT_REPOSITORY "https://github.com/protocolbuffers/protobuf.git"
-    GIT_TAG "v32.0"
-    GIT_SHALLOW TRUE
-    GIT_SUBMODULES ""
-    UPDATE_COMMAND git reset --hard
-    PATCH_COMMAND git apply --ignore-whitespace
-    "${CMAKE_CURRENT_LIST_DIR}/../../patches/protobuf-v32.0.patch"
-  )
-  set(protobuf_BUILD_TESTS OFF)
-  set(protobuf_BUILD_SHARED_LIBS ON)
-  set(protobuf_BUILD_EXPORT OFF)
-  set(protobuf_MSVC_STATIC_RUNTIME OFF)
-  #set(protobuf_BUILD_LIBUPB ON)
-  FetchContent_MakeAvailable(Protobuf)
-  list(POP_BACK CMAKE_MESSAGE_INDENT)
-  message(CHECK_PASS "fetched")
-endif()
-
-# ##############################################################################
 # RE2
 # ##############################################################################
 if(BUILD_re2)
@@ -101,6 +75,32 @@ if(BUILD_re2)
   )
   set(RE2_BUILD_TESTING OFF)
   FetchContent_MakeAvailable(re2)
+  list(POP_BACK CMAKE_MESSAGE_INDENT)
+  message(CHECK_PASS "fetched")
+endif()
+
+# ##############################################################################
+# Protobuf
+# ##############################################################################
+if(BUILD_Protobuf)
+  message(CHECK_START "Fetching Protobuf")
+  list(APPEND CMAKE_MESSAGE_INDENT "  ")
+  FetchContent_Declare(
+    Protobuf
+    GIT_REPOSITORY "https://github.com/protocolbuffers/protobuf.git"
+    GIT_TAG "v33.0"
+    GIT_SHALLOW TRUE
+    GIT_SUBMODULES ""
+    UPDATE_COMMAND git reset --hard
+    PATCH_COMMAND git apply --ignore-whitespace
+    "${CMAKE_CURRENT_LIST_DIR}/../../patches/protobuf-v33.0.patch"
+  )
+  set(protobuf_BUILD_TESTS OFF)
+  set(protobuf_BUILD_SHARED_LIBS ON)
+  set(protobuf_BUILD_EXPORT OFF)
+  set(protobuf_MSVC_STATIC_RUNTIME OFF)
+  #set(protobuf_BUILD_LIBUPB ON)
+  FetchContent_MakeAvailable(Protobuf)
   list(POP_BACK CMAKE_MESSAGE_INDENT)
   message(CHECK_PASS "fetched")
 endif()
