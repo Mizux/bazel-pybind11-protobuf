@@ -6,13 +6,12 @@ module(
 # Only direct dependencies need to be listed below.
 # Please keep the versions in sync with the versions in the WORKSPACE file.
 # see https://registry.bazel.build/
-bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.9")
-bazel_dep(name = "rules_proto", version = "7.1.0")
-bazel_dep(name = "rules_python", version = "1.7.0")
-bazel_dep(name = "abseil-cpp", version = "20250814.1")
-bazel_dep(name = "protobuf", version = "33.1")
+bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_python", version = "1.8.3")
+bazel_dep(name = "abseil-cpp", version = "20260107.1")
+bazel_dep(name = "protobuf", version = "32.1")
 bazel_dep(name = "pybind11_bazel", version = "3.0.0")
 bazel_dep(name = "pybind11_abseil", version = "202402.0")
 bazel_dep(name = "pybind11_protobuf", version = "0.0.0-20240524-1d7a729")
@@ -35,7 +34,7 @@ git_override(
 )
 
 #### DEV ONLY DEPENDENCIES BELOW HERE ####
-bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 
 SUPPORTED_PYTHON_VERSIONS = [
     "3.14",
@@ -47,7 +46,7 @@ SUPPORTED_PYTHON_VERSIONS = [
 ]
 
 DEFAULT_PYTHON = "3.13"
-python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python = use_extension("@rules_python//python/extensions:python.bzl", "python", dev_dependency = True)
 
 [
     python.toolchain(
@@ -64,11 +63,11 @@ pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip", dev_depen
 
 [
     pip.parse(
-        hub_name = "pypi_bp11_proto",
+        hub_name = "bp11_absl_pip_deps",
         python_version = version,
         requirements_lock = "//bazel:requirements.txt",
     )
     for version in SUPPORTED_PYTHON_VERSIONS
 ]
 
-use_repo(pip, pypi = "pypi_bp11_proto")
+use_repo(pip, pypi = "bp11_absl_pip_deps")
