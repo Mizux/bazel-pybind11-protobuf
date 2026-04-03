@@ -8,15 +8,12 @@ module(
 # see https://registry.bazel.build/
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "platforms", version = "1.0.0")
-bazel_dep(name = "rules_cc", version = "0.2.16")
+bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "rules_python", version = "1.8.3")
 bazel_dep(name = "abseil-cpp", version = "20260107.1")
 bazel_dep(name = "protobuf", version = "32.1")
-bazel_dep(name = "pybind11_bazel", version = "3.0.0")
+bazel_dep(name = "pybind11_bazel", version = "3.0.1")
 bazel_dep(name = "pybind11_abseil", version = "202402.0")
-bazel_dep(name = "pybind11_protobuf", version = "0.0.0-20240524-1d7a729")
-bazel_dep(name = "abseil-py", version = "2.1.0")
-
 git_override(
     module_name = "pybind11_abseil",
     commit = "70f8b693b3b70573ca785ef62d9f48054f45d786",
@@ -24,7 +21,7 @@ git_override(
     patches = ["//patches:pybind11_abseil.patch"],
     remote = "https://github.com/pybind/pybind11_abseil.git",
 )
-
+bazel_dep(name = "pybind11_protobuf", version = "0.0.0-20240524-1d7a729")
 git_override(
     module_name = "pybind11_protobuf",
     commit = "f02a2b7653bc50eb5119d125842a3870db95d251",
@@ -32,6 +29,8 @@ git_override(
     #patches = ["//patches:pybind11_protobuf.patch"],
     remote = "https://github.com/pybind/pybind11_protobuf.git",
 )
+
+bazel_dep(name = "abseil-py", version = "2.1.0")
 
 #### DEV ONLY DEPENDENCIES BELOW HERE ####
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
@@ -42,7 +41,6 @@ SUPPORTED_PYTHON_VERSIONS = [
     "3.12",
     "3.11",
     "3.10",
-    "3.9",
 ]
 
 DEFAULT_PYTHON = "3.13"
