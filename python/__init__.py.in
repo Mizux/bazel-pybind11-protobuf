@@ -21,7 +21,8 @@ def _load_dynamic_libs():
             logger.error(f"ImportError: Cannot import WinDLL")
         else:
             for dll in ["zlib1.dll",
-                        "abseil_dll.dll", "utf8_validity.dll", "re2.dll", "libprotobuf.dll",
+                        "abseil_dll.dll",
+                        "utf8_validity.dll", "re2.dll", "libprotobuf.dll",
                         "foo.dll"]:
                 dll_path = os.path.join(basedir, ".libs", dll)
                 if os.path.exists(dll_path):
